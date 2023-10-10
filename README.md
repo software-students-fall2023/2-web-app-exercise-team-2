@@ -8,7 +8,7 @@ Empower home cooks with a user-friendly app to effortlessly add, modify, manage,
 
 ## User stories
 
-See instructions. Delete this line and place a link to the user stories here.
+1. As a beginner cook, I want to have a categorized and searchable recipe repository so that I can effortlessly find and access recipes when I’m preparing a meal.
 
 ## Task boards
 
