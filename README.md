@@ -4,7 +4,7 @@ A little exercise to build a web application following an agile development proc
 
 ## Product vision statement
 
-See instructions. Delete this line and place the Product Vision Statement here.
+Empower home cooks with a user-friendly app to effortlessly add, modify, manage, and discover their recipes.
 
 ## User stories
 
