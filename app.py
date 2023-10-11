@@ -1,22 +1,24 @@
 import pymongo
+import sys
 import datetime
 from bson.objectid import ObjectId
 from flask import Flask, render_template, request, redirect, abort, url_for, make_response
 
 app = Flask(__name__)
 
-# make a connection to the database server
-connection = pymongo.MongoClient("your_db_host", 27017,
-                                username="your_db_username",
-                                password="your_db_password",
-                                authSource="your_db_name")
+#* Connected to MongoDB Database.
 
-# select a specific database on the server
-db = connection["your_db_name"]
+try:
+  client = pymongo.MongoClient("mongodb+srv://jaar2023:me8rd2iS73YJLTfW@recipes01.ajqwb7q.mongodb.net/?retryWrites=true&w=majority")
+  
+# return a friendly error if a URI error is thrown 
+except pymongo.errors.ConfigurationError:
+  print("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
+  sys.exit(1)
 
 # create the user and recipes collection
-user_collection = db["users"]
-recipes_collection = db["recipes"]
+users = client.RecipeApp
+# TODO: Everyone add in your name in the database (through the web)
 
 # login screen 
 @app.route('/login',methods=['POST'])
@@ -81,5 +83,7 @@ def show_recipescreen():
 @app.route('/createprofile')
 def show_createprofile():
     return render_template('createprofile.html')
+
+
 
 
