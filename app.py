@@ -7,9 +7,8 @@ from flask import Flask, render_template, request, redirect, abort, url_for, mak
 app = Flask(__name__)
 
 #* Connected to MongoDB Database.
-
 try:
-  client = pymongo.MongoClient("mongodb+srv://jaar2023:me8rd2iS73YJLTfW@recipes01.ajqwb7q.mongodb.net/?retryWrites=true&w=majority")
+  client = pymongo.MongoClient()
   
 # return a friendly error if a URI error is thrown 
 except pymongo.errors.ConfigurationError:
