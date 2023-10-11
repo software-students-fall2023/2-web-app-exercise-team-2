@@ -19,7 +19,7 @@ user_collection = db["users"]
 recipes_collection = db["recipes"]
 
 # login screen 
-@app.route('/',methods=['POST'])
+@app.route('/login',methods=['POST'])
 def login():
     username = request.form.get('username')
     password = request.form.get('password')
@@ -31,38 +31,55 @@ def login():
 })
     
     if user and password:
-        return redirect(url_for('main'))
+        return redirect(url_for('mainscreen'))
     else:
         return redirect(url_for('createprofile'))
 
+# create profile form
+@app.route('/createprofile', methods=['POST'])
+def createprofile():
+        name = request. form['name']
+        username = request.form['username']
+        password = request.form['password']
 
-# main recipe screen
+
+        profile = {
+            "name": name,
+            "username": username,
+            "password": password
+        }
+
+        user_collection.insert_one(profile)
+        return redirect(url_for('mainscreen'))
+
+# view main recipe screen
 @app.route('/mainscreen')
-def main():
+def view_mainscreen():
     return render_template('mainscreen.html')
 
-# add recipe screen
+# view add recipe screen
 @app.route('/addscreen')
-def main():
+def show_addscreeb():
     return render_template('addscreen.html')
 
-# edit recipe screen
+# view edit recipe screen
 @app.route('/editscreen')
-def main():
+def show_editscreen():
     return render_template('editscreen.html')
 
-# delete recipe screen
+# view delete recipe screen
 @app.route('/deletescreen')
-def main():
+def show_deletescreen():
     return render_template('deletescreen.html')
 
 # view recipe screen
-@app.route('/viewscreen')
-def main():
+@app.route('/recipescreen')
+def show_recipescreen():
     return render_template('viewscreen.html')
 
-# create profile screen
+# view create profile screen
 @app.route('/createprofile')
-def main():
+def show_createprofile():
     return render_template('createprofile.html')
+
 
