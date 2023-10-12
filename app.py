@@ -16,22 +16,27 @@ except pymongo.errors.ConfigurationError:
   sys.exit(1)
 
 # create the user and recipes collection
-users = client.RecipeApp
+db = client.RecipeApp
+users = db.get_collection['Users']
+
+
 # TODO: Everyone add in your name in the database (through the web)
 
 # login screen 
 @app.route('/login',methods=['POST'])
 def login():
+
+    # get values from HTML form found in login.html
     username = request.form.get('username')
     password = request.form.get('password')
 
     # read user collection for existing account 
-    user = db.user_collection.find_one({
+    profile = users.find_one({
     "username": username,
     "password": password
 })
     
-    if user and password:
+    if profile and password:
         return redirect(url_for('mainscreen'))
     else:
         return redirect(url_for('createprofile'))
@@ -39,7 +44,8 @@ def login():
 # create profile form
 @app.route('/createprofile', methods=['POST'])
 def createprofile():
-        name = request. form['name']
+        # get values from HTML form found in createprofile.html
+        name = request.form['name']
         username = request.form['username']
         password = request.form['password']
 
@@ -50,7 +56,7 @@ def createprofile():
             "password": password
         }
 
-        user_collection.insert_one(profile)
+        users.insert_one(profile)
         return redirect(url_for('mainscreen'))
 
 # view main recipe screen
