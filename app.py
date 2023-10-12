@@ -79,7 +79,7 @@ def show_editscreen():
 def show_deletescreen():
     return render_template('deletescreen.html')
 
-# view recipe screen
+# view one recipe screen
 @app.route('/recipescreen')
 def show_recipescreen():
     return render_template('viewscreen.html')
