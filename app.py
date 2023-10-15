@@ -54,13 +54,17 @@ def createprofile():
         username = request.form['username']
         password = request.form['password']
 
-
         profile = {
             "name": name,
             "username": username,
             "password": password
         }
-
+        
+        #todo: Verification! @Jhon
+        
+        #Todo: Add user to database
+        
+        #TODO: 
         users.insert_one(profile)
         return redirect(url_for('mainscreen'))
 
@@ -73,6 +77,7 @@ def view_mainscreen():
 @app.route('/addscreen')
 def show_addscreeb():
     return render_template('addscreen.html')
+
 
 # view edit recipe screen
 @app.route('/editscreen')
@@ -87,6 +92,8 @@ def show_deletescreen():
 # view one recipe screen
 @app.route('/recipescreen')
 def show_recipescreen():
+    
+    #todo: Add recipe functionality @Rafa
     return render_template('viewscreen.html')
 
 # view create profile screen
