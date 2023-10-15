@@ -22,6 +22,11 @@ users = db.get_collection['Users']
 
 # TODO: Everyone add in your name in the database (through the web)
 
+
+use = {
+    "name" : "Rafael Nadal"
+}
+
 # login screen 
 @app.route('/login',methods=['POST'])
 def login():
