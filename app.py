@@ -17,7 +17,7 @@ except pymongo.errors.ConfigurationError:
 
 # create the user and recipes collection
 db = client.RecipeApp
-users = db.get_collection['Users']
+users = db.get_collection('Users')
 
 
 # TODO: Everyone add in your name in the database (through the web)
@@ -53,14 +53,19 @@ def createprofile():
         name = request.form['name']
         username = request.form['username']
         password = request.form['password']
-
-        profile = {
-            "name": name,
-            "username": username,
-            "password": password
-        }
         
         #todo: Verification! @Jhon
+        user_exists = users.find_one({"username": username})
+
+        if user_exists:
+            return "User already exists" #should create like pop up in front end to let user know
+        else:
+            profile = {
+                "name": name,
+                "username": username,
+                "password": password
+            }
+
         
         #Todo: Add user to database
         
