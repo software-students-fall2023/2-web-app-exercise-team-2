@@ -56,18 +56,15 @@
 </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="login-form">
-            <input type="text" id="username" name="username" placeholder="Username">
-            <br>
-            <input type="password" id="password" name="password" placeholder="Password">
-            <br>
-            
+<div class="phone-container">
+    <div class="container">
+        <div class="title">Login</div>
+        <form action="/login" method="post">
+        <input type="text" class="input" placeholder="Username" required>
+        <input type="password" class="input" placeholder="Password" required>
+        <button class="button">Login</button>
         </form>
     </div>
-    <div class="Login Button">
-        <input type="submit" value="Login" class="login-b">
-    </div>
+</div>
 </body>
 </html>
