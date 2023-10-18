@@ -9,7 +9,6 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
-            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -30,13 +29,20 @@
         }
 
         .container {
-            width: 300px;
-            text-align: center;
+            width: 22.5em;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
         .title {
             font-size: 24px;
-            margin-bottom: 20px;
+            text-align: center;
+            margin-top: 1em;
+            margin-bottom: 1em;
+
         }
 
         .input {
@@ -60,64 +66,55 @@
             box-sizing: border-box;
         }
 
-        .recipeContainer {
-            width: 300px;
-            height: 250px;
-            background: #D9D9D9;
-            padding: 10px;
-            margin-bottom: 10px;
-            margin-left: auto;
-            margin-right: auto;
-            width: 8em;
-            flex-direction: column;
-            /* stack children vertically */
-            align-items: center;
-            /* center children horizontally */
-            justify-content: center;
-            /* center children vertically */
+        .recipe {
+            flex: 1 1 150px;
+            background-color: slateblue;
+            color: white;
+            height: 15em;
+            text-align: center;
+            padding-top: 1em;
+            border-radius: 5px;
+            margin: 10px;
         }
 
-        .recipePhoto {
-            margin: 10px auto;
-            margin-left: auto;
-            margin-right: auto;
-
-            width: 100px;
-            height: 100px;
-            border-radius: 10px;
-            background-color: #fff;
-        }
-
-        .recipeDescription {
-            margin: 10px auto;
-            top: 18px;
-            margin-left: auto;
-            margin-right: auto;
-            width: 8em;
-            border-radius: 10px;
-            width: 100px;
-            height: 100px;
-            background-color: #fff;
+        .bar {
+            width: 90%;
+            border-color: black;
+            opacity: 30%;
         }
     </style>
 </head>
 
 <body>
     <div class="phone-container">
+
+
+        <div class="title">Recipes</div>
+
+
         <div class="container">
-            <div class="title">Recipes</div>
-
-            <div class=recipeContainer>
-                <div class="recipePhoto">
-
-                </div>
-                <div class="recipeDescription">
-
+            <div class="recipe">Recipe title<div>
+            <!-- need to make a class for the description so that the text doesn't overflow -->
+                    <hr class="bar"> Recipe description
                 </div>
             </div>
-
+            <div class="recipe">Recipe title<div>
+                    <hr class="bar"> Recipe description
+                </div>
+            </div>
+            <div class="recipe">Recipe title<div>
+                    <hr class="bar"> Recipe description
+                </div>
+            </div>
+            <div class="recipe">Recipe title<div>
+                    <hr class="bar"> Recipe description
+                </div>
+            </div>
         </div>
+
+
     </div>
-</body>
+    </div>
+</body>`
 
 </html>
