@@ -1,17 +1,31 @@
-import pymongo
 import sys
+import os
+import logging
+from flask import Flask, render_template, request, redirect, abort, url_for, make_response
+import pymongo
+from dotenv import load_dotenv
 import datetime
 from bson.objectid import ObjectId
-from flask import Flask, render_template, request, redirect, abort, url_for, make_response
+from pymongo.errors import ConfigurationError
+
 
 app = Flask(__name__)
+load_dotenv()
+token = os.getenv('DB_CONNECTION_STRING')
+# # * Set-up error logger.
+logging.basicConfig(filename='error.log', level=logging.ERROR)
 
 #* Connected to MongoDB Database.
+
+
 try:
-  client = pymongo.MongoClient()
+  client = pymongo.MongoClient(token)
   
 # return a friendly error if a URI error is thrown 
-except pymongo.errors.ConfigurationError:
+# Todo: Fix issue with logging error including the port.
+#? For some reason when I do flask --app app run it logs the port message into the error log.
+except pymongo.errors.ConfigurationError as e:
+  logging.error("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
   print("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
   sys.exit(1)
 
