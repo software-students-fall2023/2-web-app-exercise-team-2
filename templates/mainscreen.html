@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Screen</title>
+    <title>Main screen</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,9 +13,24 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            font-weight: bold;
         }
 
+        .title {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5em;
+        }
+
+
         .phone-container {
+            position: relative;
             width: 390px;
             height: 844px;
             background-color: #ffffff;
@@ -28,7 +43,22 @@
             overflow: hidden;
         }
 
+        .top-left {
+            position: absolute;
+            top: 2em;
+            left: 1em;
+            background-color: slateblue;
+            border-radius: 5px;
+            border: 0;
+            width: 5em;
+            height: 3em;
+            color: white;
+            padding: 5px;
+        }
+
         .container {
+            margin-top: auto;
+            height: 85%;
             width: 22.5em;
             display: flex;
             flex-wrap: wrap;
@@ -37,13 +67,59 @@
             white-space: nowrap;
         }
 
-        .title {
-            font-size: 24px;
+        .recipe {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            position: relative;
+            flex: auto;
+            background-color: slateblue;
+            color: white;
+            height: 30em;
             text-align: center;
-            margin-top: 1em;
-            margin-bottom: 1em;
-
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: hidden;
         }
+
+        .recipe-title {
+            font-size: 16px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .recipe-photo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            flex: 0 0 40%;
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 5px;
+            background-color: white;
+            background-size: cover;
+            background-position: center;
+            color: grey;
+        }
+
+        .recipe-description {
+            word-wrap: break-word;
+            flex: 0 0 40%;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: white;
+            border-radius: 5px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
 
         .input {
             width: 100%;
@@ -55,66 +131,55 @@
             box-sizing: border-box;
         }
 
-        .button {
+        .recipe-button{
+            flex: 0 0 40%;
             width: 100%;
-            background-color: #E6E6FA;
-            color: black;
-            padding: 10px;
-            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
             border-radius: 4px;
-            cursor: pointer;
+            border: none;
+            color: black;
+            display: inline-block;
+            width: 90px;
             box-sizing: border-box;
-        }
-
-        .recipe {
-            flex: 1 1 150px;
-            background-color: slateblue;
-            color: white;
-            height: 15em;
-            text-align: center;
-            padding-top: 1em;
-            border-radius: 5px;
-            margin: 10px;
-        }
-
-        .bar {
-            width: 90%;
-            border-color: black;
-            opacity: 30%;
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
     <div class="phone-container">
-
-
+        <button class="top-left">Back</button>
         <div class="title">Recipes</div>
-
-
         <div class="container">
-            <div class="recipe">Recipe title<div>
-            <!-- need to make a class for the description so that the text doesn't overflow -->
-                    <hr class="bar"> Recipe description
+
+            <div class="recipe">
+                <div class="recipe-title">Recipe title</div>
+                <div class="recipe-photo">Photo here</div>
+                <div class="recipe-description">dfgdfgfgfdgdfgdfgdfdfsdfsdfsdg</div>
+                <div class="button-container">
+                    <button class="recipe-button">View</button>
+                    <button class="recipe-button">Edit</button>
+                    <button class="recipe-button">Delete</button>
                 </div>
             </div>
-            <div class="recipe">Recipe title<div>
-                    <hr class="bar"> Recipe description
+
+
+
+            <div class="recipe">
+                <div class="recipe-title">Recipe title</div>
+                <div class="recipe-photo">Photo here</div>
+                <div class="recipe-description">dfgdfgfgfdgdfgdfgdfdfsdfsdfsdg</div>
+                <div class="button-container">
+                    <button class="recipe-button">View</button>
+                    <button class="recipe-button">Edit</button>
+                    <button class="recipe-button">Delete</button>
                 </div>
             </div>
-            <div class="recipe">Recipe title<div>
-                    <hr class="bar"> Recipe description
-                </div>
-            </div>
-            <div class="recipe">Recipe title<div>
-                    <hr class="bar"> Recipe description
-                </div>
-            </div>
+            
+
         </div>
-
-
     </div>
-    </div>
-</body>`
+</body>
 
 </html>
