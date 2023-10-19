@@ -37,7 +37,7 @@
   margin-right: 0px;
   float: right;
   width: 288px;
-  height: 148px;
+  height: 120px;
   justify-content: center;
   align-items: center;
   background-color: #ada6a6;
@@ -45,6 +45,7 @@
   flex-direction: column;
   text-align: center;
   border-radius: 10px;
+  padding-bottom: 20px;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
   overflow: show;
   position: relative;
