@@ -2,7 +2,7 @@ import pymongo
 import sys
 import datetime
 from bson.objectid import ObjectId
-from flask import Flask, render_template, request, redirect, abort, url_for, make_response, session
+from flask import Flask, render_template, request, redirect, abort, url_for, make_response
 
 app = Flask(__name__)
 
@@ -19,10 +19,14 @@ except pymongo.errors.ConfigurationError:
 db = client.RecipeApp
 users = db.get_collection('Users')
 
+@app.route('/')
+def view_dashboard():
+    return render_template('index.html')
 
-# TODO: Everyone add in your name in the database (through the web)
-
-
+# Generate login page
+@app.route('/loginpage', methods=['GET'])
+def generate_login_page():
+    return render_template('login.html')
 # login screen 
 @app.route('/login',methods=['POST'])
 def login():
