@@ -1,17 +1,84 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" type="text/css" href="styles.css"/> 
 <head>
     <meta charset="UTF-8">
 </head>
+<style>        
+
+.top-left {
+    position: absolute;
+    top: 2em;
+    left: 1em;
+    background-color: slateblue;
+    border-radius: 5px;
+    border: 0;
+    width: 5em;
+    height: 3em;
+    color: white;
+    padding: 5px;
+}
+.title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.container {
+    width: 300px;
+    text-align: center;
+}
+.phone-container {
+    position: relative;
+    width: 390px;
+    height: 844px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+.profilePhoto {
+  height: 75px;
+  width: 75px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    color: black;
+    box-sizing: border-box;
+}
+.top-right {
+    position: absolute;
+    top: 2em;
+    right: 1em;
+    background-color: slateblue;
+    border-radius: 5px;
+    border: 0;
+    width: 5em;
+    height: 3em;
+    color: white;
+    padding: 5px;
+}
+</style>
 <div class="phone-container">
+    <button class="top-left">Back</button>
+    <button class="top-right">Edit</button>
+    <div class="profilePhoto"></div>
     <div class="container">
+        
         <div class="title">Profile Information</div>
         <input type="Full Name" class="input" placeholder="Full Name" disabled="disabled">
         <input type="text" class="input" placeholder="Username" disabled="disabled">
         <input type="password" class="input" placeholder="Password" disabled="disabled">
-        <button class="button2">Back</button>
-        <button class="button2">Edit</button>
+        
         </form>
     </div>
 </div>
