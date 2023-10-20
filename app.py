@@ -2,7 +2,7 @@ import sys
 import os
 import User
 import logging
-from flask import Flask, render_template, request, redirect, abort, url_for, make_response, session
+from flask import Flask, render_template, request, redirect, abort, url_for, make_response, session, flash
 import pymongo
 from dotenv import load_dotenv 
 import datetime
@@ -18,6 +18,7 @@ logging.basicConfig(filename='debug.log', level=logging.INFO)
 logging.basicConfig(filename='debug.log', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 #* Connected to MongoDB Database.
+app.debug = True
 if __name__ == "__main__":
     app.run(debug=True)
 try:
@@ -37,6 +38,7 @@ db = client.RecipeApp
 users = db.get_collection('Users')
 currUser = None
 #Current user mapper
+app.debug = True
 def map_json_to_user(json_obj):
     try:
         name = json_obj.get("name")
@@ -59,15 +61,18 @@ def map_user_to_json(user):
         return user_data
     except Exception as e:
         logger.error("MAPPING ERROR: error in mapping user to JSON.")
+app.debug = True
 @app.route('/')
 def view_dashboard():
     return render_template('index.html')
 
 # Generate login page
+app.debug = True
 @app.route('/loginpage', methods=['GET'])
 def generate_login_page():
     return render_template('login.html')
 # login screen 
+app.debug = True
 @app.route('/login',methods=['POST'])
 def login():
     global currUser
@@ -95,32 +100,63 @@ def login():
         return redirect(url_for('createprofile'))
     
 # create profile form
+# app.debug = True
+# @app.route('/createprofile', methods=['POST'])
+# def createprofile():
+#         global currUser
+#         # get values from HTML form found in createprofile.html
+#         name = request.form['name']
+#         username = request.form['username']
+#         password = request.form['password']
+        
+#         #* Verification! @Jhon
+#         user_exists = users.find_one({"username": username})
+
+#         if user_exists:
+#             #Todo: @Alex and @Aaron
+#             return "User already exists" #should create like pop up in front end to let user know
+#         else:
+#             try:
+#                 currUser = User(name, username, password)
+#                 jsonUser = map_user_to_json(currUser)
+#                 logger.info(f"Successfully created JSON User to be inserted in database with username {jsonUser.get(username)} .")
+#                 users.insert_one(jsonUser)
+#                 return redirect(url_for('mainscreen'))
+#             except Exception as e:
+#                 logger.error(f"AMBIGUOUS ERROR:Unsuccessfull profile creation. Error code: {e}")
+
+@app.route('/createprofile', methods=['GET'])
+def show_createprofile_form():
+    return render_template('createprofile.html')
+
 @app.route('/createprofile', methods=['POST'])
 def createprofile():
-        global currUser
-        # get values from HTML form found in createprofile.html
-        name = request.form['name']
-        username = request.form['username']
-        password = request.form['password']
-        
-        #* Verification! @Jhon
-        user_exists = users.find_one({"username": username})
+    global currUser
+    name = request.form['name']
+    username = request.form['username']
+    password = request.form['password']
+    
+    user_exists = users.find_one({"username": username})
 
-        if user_exists:
-            #Todo: @Alex and @Aaron
-            return "User already exists" #should create like pop up in front end to let user know
-        else:
-            try:
-                currUser = User(name, username, password)
-                jsonUser = map_user_to_json(currUser)
-                logger.info(f"Successfully created JSON User to be inserted in database with username {jsonUser.get(username)} .")
-                users.insert_one(jsonUser)
-                return redirect(url_for('mainscreen'))
-            except Exception as e:
-                logger.error(f"AMBIGUOUS ERROR:Unsuccessfull profile creation. Error code: {e}")
+    if user_exists:
+        flash("User already exists", "error") #flash method to show a message
+        return redirect(url_for('createprofile'))
+    else:
+        try:
+            currUser = User(name, username, password)
+            jsonUser = map_user_to_json(currUser)
+            logger.info(f"Successfully created JSON User to be inserted in database with username {jsonUser.get(username)} .")
+            users.insert_one(jsonUser)
+            return redirect(url_for('mainscreen'))
+        except Exception as e:
+            logger.error(f"AMBIGUOUS ERROR: Unsuccessful profile creation. Error code: {e}")
+            flash("An error occurred while creating your profile. Please try again.", "error")
+            return redirect(url_for('createprofile'))
+
         
 
 # view main recipe screen
+app.debug = True
 @app.route('/mainscreen')
 def view_mainscreen():
     global currUser
@@ -134,6 +170,7 @@ def view_mainscreen():
     return render_template('mainscreen.html')
 
 # view add recipe screen
+app.debug = True
 @app.route('/addscreen', methods=['GET', 'POST'])
 def show_addscreen():
     global currUser
@@ -158,7 +195,8 @@ def show_addscreen():
         users.update_one({"username": currUser.username}, {"$push": {"recipes": new_recipe}}) #$push is MongoDB operator that appens this value into recipes array
         logger.info("No error so far in recipe addition")
         return redirect(url_for('mainscreen'))
-    
+
+app.debug = True 
 @app.route('/editscreen/<recipe_name>', methods=['GET', 'POST'])
 def show_editscreen(recipe_name):
     username = session.get('username')
@@ -198,6 +236,7 @@ def show_editscreen(recipe_name):
         return redirect(url_for('mainscreen'))
 
 # view delete recipe screen
+app.debug = True
 @app.route('/deletescreen/<recipe_id>', methods=['GET', 'POST']) #need recipe_id for specific recipe deletion
 def show_deletescreen(recipe_name): #need to pass recipe_id as an arugment
     if request.method == 'GET': #default screen to show delete recipe screen
@@ -210,6 +249,7 @@ def show_deletescreen(recipe_name): #need to pass recipe_id as an arugment
         return redirect(url_for('mainscreen')) #going back to mainscreen
 
 #viewing specific recipe
+app.debug = True
 @app.route('/recipescreen/<recipe_name>')
 def show_recipescreen(recipe_name):
     username = currUser.email
@@ -217,6 +257,7 @@ def show_recipescreen(recipe_name):
     return render_template('viewscreen.html')
 
 # view profile that is already created
+app.debug = True
 @app.route('/createprofile', methods=['GET'])
 def show_createprofile():
     return render_template('createprofile.html')
