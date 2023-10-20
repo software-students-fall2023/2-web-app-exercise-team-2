@@ -14,17 +14,21 @@ load_dotenv()
 token = os.getenv('DB_CONNECTION_STRING')
 # # * Set-up error logger.
 logging.basicConfig(filename='error.log', level=logging.ERROR)
-
+logging.basicConfig(filename='debug.log', level=logging.INFO)
+logging.basicConfig(filename='debug.log', level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 #* Connected to MongoDB Database.
-
+if __name__ == "__main__":
+    app.run(debug=True)
 try:
   client = pymongo.MongoClient(token)
-  
+  logger.info("Successfully connected to db.")
+
 # return a friendly error if a URI error is thrown 
-# Todo: Fix issue with logging error including the port.
+# Todo: Fix issue with logger error including the port.
 #? For some reason when I do flask --app app run it logs the port message into the error log.
 except pymongo.errors.ConfigurationError as e:
-  logging.error("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
+  logger.error("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
   print("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
   sys.exit(1)
 
@@ -34,15 +38,27 @@ users = db.get_collection('Users')
 currUser = None
 #Current user mapper
 def map_json_to_user(json_obj):
-    user_id = json_obj.get("_id")
-    name = json_obj.get("name")
-    email = json_obj.get("email")
-    age = json_obj.get("age")
-    recipes = json_obj.get("recipes", {})
-
-    return User(user_id, name, email, age, recipes)
-
-
+    try:
+        name = json_obj.get("name")
+        username = json_obj.get("username")
+        age = json_obj.get("age")
+        recipes = json_obj.get("recipes", {})
+        u = User(name, username, age, recipes)
+        logger.info(f"{u} was created")
+        return u
+    except Exception as e:
+        logger.error("MAPPING ERROR: error in mapping JSON to user.")
+def map_user_to_json(user):
+    try:
+        user_data = {
+            "name": user.name,
+            "username": user.username,
+            "age" : user.age,
+            "recipes": user.recipes
+        }
+        return user_data
+    except Exception as e:
+        logger.error("MAPPING ERROR: error in mapping user to JSON.")
 @app.route('/')
 def view_dashboard():
     return render_template('index.html')
@@ -56,17 +72,23 @@ def generate_login_page():
 def login():
     global currUser
     # get values from HTML form found in login.html
-    username = request.form.get('username')
-    password = request.form.get('password')
+    try:
+        username = request.form.get('username')
+        password = request.form.get('password')
+        logger.info("Information from front-end retrieved successfully.")
+    except Exception as e:
+        logger.error("RETRIEVAL ERROR: Problem retrieving info from front-end.")
 
     # read user collection for existing account 
+    
     profile = users.find_one({
-    "email": username,
+    "username": username,
     "password": password
     })
     
     if profile:
         currUser = map_json_to_user(profile)  #saving username in session so it can be used in other functions == not localized
+        logger.info(f"User has been logged in with username: ({currUser.username}) .")
         return redirect(url_for('mainscreen'))
     else:
         #Todo: Change to printing "incorrect username or password"
@@ -81,49 +103,50 @@ def createprofile():
         username = request.form['username']
         password = request.form['password']
         
-        #todo: Verification! @Jhon
+        #* Verification! @Jhon
         user_exists = users.find_one({"username": username})
 
         if user_exists:
             #Todo: @Alex and @Aaron
             return "User already exists" #should create like pop up in front end to let user know
         else:
-            profile = {
-                "name": name,
-                "email": username,
-                "password": password
-            }
-            #Todo: Add user to database
-            users.insert_one(profile)
-            #find and map
-            currUser = map_json_to_user(users.find(profile))
-        return redirect(url_for('mainscreen'))
+            try:
+                currUser = User(name, username, password)
+                jsonUser = map_user_to_json(currUser)
+                logger.info(f"Successfully created JSON User to be inserted in database with username {jsonUser.get(username)} .")
+                users.insert_one(jsonUser)
+                return redirect(url_for('mainscreen'))
+            except Exception as e:
+                logger.error(f"AMBIGUOUS ERROR:Unsuccessfull profile creation. Error code: {e}")
+        
 
 # view main recipe screen
 @app.route('/mainscreen')
 def view_mainscreen():
+    global currUser
     #If none then redirect to mainpage
     if currUser is None:
         return render_template("index.html")
-        
-    username = currUser.email
-    user_data = users.find_one({"username": username})
-    if user_data and 'recipes' in user_data:
-        return render_template('mainscreen.html', recipes=user_data['recipes'])
+    #else continue
+    #todo: Stress test for 0 recipes and for 1 recipe
+    if len(currUser.recipes) > 0:
+        return render_template('mainscreen.html', recipes=currUser.recipes)
     return render_template('mainscreen.html')
 
 # view add recipe screen
 @app.route('/addscreen', methods=['GET', 'POST'])
 def show_addscreen():
-    username = currUser.email
+    global currUser
     if request.method == 'GET': #this is by default to show form to user
         return render_template('addscreen.html')
     elif request.method == 'POST': #this is to save users input plz make sure there the save button is with POST request
+        
+        #* Retrieve add information.
         recipe_name = request.form['recipe_name']
         cook_time = request.form['cook_time']
-        ingredients = request.form['ingredients'] #any format, should we specify? => REACH goal
+        ingredients = request.form['ingredients'] #any format, should wef specify? => REACH goal
         instructions = request.form['instructions'] #parsing => REACH goal
-
+        currUser.recipes.ingredients()
         #creating the JSON(?) object for the new recipe
         new_recipe = {
             "name": recipe_name,
@@ -132,27 +155,10 @@ def show_addscreen():
             "instructions": instructions
         }
         #assuming the user is already logged in & you have their username available
-        users.update_one({"username": username}, {"$push": {"recipes": new_recipe}}) #$push is MongoDB operator that appens this value into recipes array
+        users.update_one({"username": currUser.username}, {"$push": {"recipes": new_recipe}}) #$push is MongoDB operator that appens this value into recipes array
+        logger.info("No error so far in recipe addition")
         return redirect(url_for('mainscreen'))
-
-# view edit recipe screen
-@app.route('/editscreen/<recipe_name>', methods=['GET', 'POST']) #need to add "Edit" button with a link to /editscreen/<recipe_name> per recipe !frontend thing!
-def show_editscreen(recipe_name):
-    if request.method == 'GET': #default screen to show edit recipe screen
-        return render_template('editscreen.html', recipe_name=recipe_name)
-    elif request.method == 'POST': #user's decision to save or not
-
-@app.route('/editscreen/<recipe_name>', methods=['GET', 'POST'])
-def show_editscreen(recipe_name):
-    username = session.get('username')
-    user_data = users.find_one({"username": username})
     
-    current_recipe = None
-    for recipe in user_data['recipes']:
-        if recipe['name'] == recipe_name:
-            current_recipe = recipe
-            break
-
 @app.route('/editscreen/<recipe_name>', methods=['GET', 'POST'])
 def show_editscreen(recipe_name):
     username = session.get('username')

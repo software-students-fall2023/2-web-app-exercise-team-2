@@ -1,13 +1,25 @@
 class User:
     user_id = None
     name = None
-    email = None
+    username = None
     age = None
     recipes = {}
 
-    def __init__(self, user_id, name, email, age, recipes):
-        self.user_id = user_id
+    def __init__(self, name, username, age = None, Recipe = None):
         self.name = name
-        self.email = email
+        self.username = username
         self.age = age
-        self.recipes = recipes
+        self.recipes = [Recipe] if Recipe is not None else [] 
+    def str(self):
+        print(f"{self.name} with {self.username}")
+        
+    class Recipe:
+        name = None
+        cookTime = None
+        ingredients = []
+        
+        def __init__(self, name, ingredients, cookTime=None):
+            self.name = name
+            self.cookTime = cookTime
+            ingredients = ingredients
+                
