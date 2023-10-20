@@ -1,5 +1,6 @@
 import sys
 import os
+import User
 import logging
 from flask import Flask, render_template, request, redirect, abort, url_for, make_response, session
 import pymongo
@@ -30,6 +31,17 @@ except pymongo.errors.ConfigurationError as e:
 # create the user and recipes collection
 db = client.RecipeApp
 users = db.get_collection('Users')
+currUser = None
+#Current user mapper
+def map_json_to_user(json_obj):
+    user_id = json_obj.get("_id")
+    name = json_obj.get("name")
+    email = json_obj.get("email")
+    age = json_obj.get("age")
+    recipes = json_obj.get("recipes", {})
+
+    return User(user_id, name, email, age, recipes)
+
 
 @app.route('/')
 def view_dashboard():
@@ -42,25 +54,28 @@ def generate_login_page():
 # login screen 
 @app.route('/login',methods=['POST'])
 def login():
+    global currUser
     # get values from HTML form found in login.html
     username = request.form.get('username')
     password = request.form.get('password')
 
     # read user collection for existing account 
     profile = users.find_one({
-    "username": username,
+    "email": username,
     "password": password
     })
-
+    
     if profile:
-        session['username'] = username  #saving username in session so it can be used in other functions == not localized
+        currUser = map_json_to_user(profile)  #saving username in session so it can be used in other functions == not localized
         return redirect(url_for('mainscreen'))
     else:
+        #Todo: Change to printing "incorrect username or password"
         return redirect(url_for('createprofile'))
     
 # create profile form
 @app.route('/createprofile', methods=['POST'])
 def createprofile():
+        global currUser
         # get values from HTML form found in createprofile.html
         name = request.form['name']
         username = request.form['username']
@@ -70,24 +85,28 @@ def createprofile():
         user_exists = users.find_one({"username": username})
 
         if user_exists:
+            #Todo: @Alex and @Aaron
             return "User already exists" #should create like pop up in front end to let user know
         else:
             profile = {
                 "name": name,
-                "username": username,
+                "email": username,
                 "password": password
             }
+            #Todo: Add user to database
             users.insert_one(profile)
-
-        #Todo: Add user to database
-        
-        #TODO: 
+            #find and map
+            currUser = map_json_to_user(users.find(profile))
         return redirect(url_for('mainscreen'))
 
 # view main recipe screen
 @app.route('/mainscreen')
-def view_mainscreen(): 
-    username = session.get('username')
+def view_mainscreen():
+    #If none then redirect to mainpage
+    if currUser is None:
+        return render_template("index.html")
+        
+    username = currUser.email
     user_data = users.find_one({"username": username})
     if user_data and 'recipes' in user_data:
         return render_template('mainscreen.html', recipes=user_data['recipes'])
@@ -96,7 +115,7 @@ def view_mainscreen():
 # view add recipe screen
 @app.route('/addscreen', methods=['GET', 'POST'])
 def show_addscreen():
-    username = session.get('username')
+    username = currUser.email
     if request.method == 'GET': #this is by default to show form to user
         return render_template('addscreen.html')
     elif request.method == 'POST': #this is to save users input plz make sure there the save button is with POST request
@@ -180,14 +199,14 @@ def show_deletescreen(recipe_name): #need to pass recipe_id as an arugment
     elif request.method == 'POST': #user's decision to delete or not
         decision = request.form.get('decision')  #on front-end please name the yes or no buttons 'decision 
         if decision == 'yes':
-            username = session.get('username')
+            username = currUser.email
             users.update_one({"username": username}, {"$pull": {"recipes": {"name": recipe_name}}}) # delete using the name
         return redirect(url_for('mainscreen')) #going back to mainscreen
 
 #viewing specific recipe
 @app.route('/recipescreen/<recipe_name>')
 def show_recipescreen(recipe_name):
-    username = session.get('username')
+    username = currUser.email
     user_data = users.find_one({"username": username})
     return render_template('viewscreen.html')
 

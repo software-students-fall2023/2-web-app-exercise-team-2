@@ -107,18 +107,12 @@
 <div class="phone-container">
     <div class="container">
         <div class="title">Create/Edit Profile</div>
-        <div class="photoContainer">
-            <div class="profilePhoto">Upload Photo</div>
-            <input type="file" class="hiddenFileInput" accept="image/jpeg, image/png, image/gif, image/bmp"
-                placeholder="photo" />
-        </div>
-        <input type="Full Name" class="input" placeholder="Full Name" required>
-        <input type="text" class="input" placeholder="Username" required>
-        <input type="password" class="input" placeholder="Password" required>
-        <button class="top-left">Back</button>
-        <button class="save">Save</button>
-        
-
+        <form method="POST" action="{{ url_for('createprofile') }}">
+            <input type="text" class="input" name="name" placeholder="Full Name" required>
+            <input type="text" class="input" name="username" placeholder="Username" required>
+            <input type="password" class="input" name="password" placeholder="Password" required>
+            <button class="button2" type="button">Back</button>
+            <button class="button2" type="submit">Save</button>
         </form>
     </div>
 </div>
