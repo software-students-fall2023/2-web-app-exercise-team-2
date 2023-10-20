@@ -1,6 +1,7 @@
 import sys
+import certifi
 import os
-import User
+from User import User
 import logging
 from flask import Flask, render_template, request, redirect, abort, url_for, make_response, session, flash
 import pymongo
@@ -8,8 +9,14 @@ from dotenv import load_dotenv
 import datetime
 from bson.objectid import ObjectId
 from pymongo.errors import ConfigurationError
+import secrets
 
+# Generate a secure secret key
+
+ca = certifi.where()
 app = Flask(__name__)
+app.secret_key = secrets.token_hex(16)
+
 load_dotenv()
 token = os.getenv('DB_CONNECTION_STRING')
 # # * Set-up error logger.
@@ -22,7 +29,7 @@ app.debug = True
 if __name__ == "__main__":
     app.run(debug=True)
 try:
-  client = pymongo.MongoClient(token)
+  client = pymongo.MongoClient("mongodb+srv://jaar2023:me8rd2iS73YJLTfW@recipes01.ajqwb7q.mongodb.net/")
   logger.info("Successfully connected to db.")
 
 # return a friendly error if a URI error is thrown 
@@ -44,6 +51,7 @@ def map_json_to_user(json_obj):
         name = json_obj.get("name")
         username = json_obj.get("username")
         age = json_obj.get("age")
+        password = json_obj.get("password")
         recipes = json_obj.get("recipes", {})
         u = User(name, username, age, recipes)
         logger.info(f"{u} was created")
@@ -56,12 +64,28 @@ def map_user_to_json(user):
             "name": user.name,
             "username": user.username,
             "age" : user.age,
-            "recipes": user.recipes
+            "password": user.password,
+            "recipes": map_userRecipes_to_jsonRecipes(user)
         }
         return user_data
     except Exception as e:
         logger.error("MAPPING ERROR: error in mapping user to JSON.")
 app.debug = True
+        
+def map_userRecipes_to_jsonRecipes(user):
+    try:
+        recipes = user.recipes
+        user_recipes = []
+        for recipe in recipes:
+            user_recipe = {
+                "title" : recipe.get("title", ""),  # Access title if it exists, or use an empty string as a default
+                "cookingTime" : recipe.get("cookingTime", 0),  # Access cookingTime if it exists, or use 0 as a default
+                "ingredients" : recipe.get("ingredients", [])  # Access ingredients if it exists, or use an empty list as a default
+            }
+            user_recipes.append(user_recipe)
+        return user_recipes
+    except Exception as e:
+        logger.error(f"Mapping error: {e}")
 @app.route('/')
 def view_dashboard():
     return render_template('index.html')
@@ -82,7 +106,7 @@ def login():
         password = request.form.get('password')
         logger.info("Information from front-end retrieved successfully.")
     except Exception as e:
-        logger.error("RETRIEVAL ERROR: Problem retrieving info from front-end.")
+        logger.error(f"RETRIEVAL ERROR: Problem retrieving info from front-end.{e}")
 
     # read user collection for existing account 
     
@@ -142,17 +166,19 @@ def createprofile():
         flash("User already exists", "error") #flash method to show a message
         return redirect(url_for('createprofile'))
     else:
-        try:
-            currUser = User(name, username, password)
-            jsonUser = map_user_to_json(currUser)
-            logger.info(f"Successfully created JSON User to be inserted in database with username {jsonUser.get(username)} .")
-            users.insert_one(jsonUser)
-            return redirect(url_for('mainscreen'))
-        except Exception as e:
-            logger.error(f"AMBIGUOUS ERROR: Unsuccessful profile creation. Error code: {e}")
-            flash("An error occurred while creating your profile. Please try again.", "error")
-            return redirect(url_for('createprofile'))
-
+        if user_exists:
+            flash("User already exists. Please try again.", 'error')
+            return render_template("createprofile.html")
+        else:
+            try:
+                currUser = User(name, username, password)
+                jsonUser = map_user_to_json(currUser)
+                # logger.info(f"Successfully created JSON User to be inserted in database with username {jsonUser.get(username)} .")
+                users.insert_one(jsonUser)
+                return redirect(url_for('view_mainscreen'))
+            except Exception as e:
+                logger.error(f"Error in creating profile: Unsuccessfull profile creation. Error code: {e}")
+                return render_template("createprofile.html")
         
 
 # view main recipe screen

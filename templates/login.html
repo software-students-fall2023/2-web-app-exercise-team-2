@@ -67,17 +67,18 @@
 <div class="phone-container">
     <div class="container">
         <div class="title">Login</div>
-        <form action="/login" method="post">
-        <input type="text" class="input" placeholder="Username" required>
-        <input type="password" class="input" placeholder="Password" required>
-        <button onclick="incorrectUorP()" class="button">Login</button>
+        <form action="/login" method="POST" >
+            <input type="text" class="input" placeholder="Username" required>
+            <input type="password" class="input" placeholder="Password" required>
+            <button class="button" type="submit">Login</button>
+            <button class="button" type="button" onclick="window.location.href='{{ url_for('view_dashboard') }}'">Back</button>
         </form>
     </div>
 </div>
+</body>
+</html>
 <script>
     function incorrectUorP() {
       alert("Incorrect Username or Password! Please try Again or Create a Profile.");
     }
 </script>
-</body>
-</html>
