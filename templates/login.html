@@ -55,6 +55,8 @@
     }
 </style>
 </head>
+
+    
 <body>
 <div class="phone-container">
     <div class="container">
@@ -62,9 +64,14 @@
         <form action="/login" method="post">
         <input type="text" class="input" placeholder="Username" required>
         <input type="password" class="input" placeholder="Password" required>
-        <button class="button">Login</button>
+        <button onclick="incorrectUorP()" class="button">Login</button>
         </form>
     </div>
 </div>
+<script>
+    function incorrectUorP() {
+      alert("Incorrect Username or Password! Please try Again or Create a Profile.");
+    }
+</script>
 </body>
 </html>
