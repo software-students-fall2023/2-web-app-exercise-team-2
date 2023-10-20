@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
 </head>
 <style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 110vh;
+    font-weight: bold;
+}
     .top-left {
     position: absolute;
     top: 2em;
@@ -37,12 +46,40 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
+.hiddenFileInput {
+            position: absolute;
+            width: 340px;
+            height: 160px;
+            border-radius: 5px;
+            opacity: 0;
+            background-color: black;
+        }
+
+.photoContainer {
+    border-radius: 5px;
+    width: 100%;
+    height: 10em;
+    border: none;
+    background-color: white;
+    color: grey;
+    cursor: pointer;
+    font-size: 16px;
+    margin: auto;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .profilePhoto {
-  height: 75px;
-  width: 75px;
+  height: 110px;
+  width: 110px;
   background-color: #bbb;
   border-radius: 50%;
-  display: inline-block;
+  color: black;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 .input {
@@ -67,15 +104,23 @@
     padding: 5px;
 }
 
+
 </style>
 <div class="phone-container">
     <div class="container">
         <div class="title">Create/Edit Profile</div>
+        <div class="photoContainer">
+            <div class="profilePhoto">Upload Photo</div>
+            <input type="file" class="hiddenFileInput" accept="image/jpeg, image/png, image/gif, image/bmp"
+                placeholder="photo" />
+        </div>
         <input type="Full Name" class="input" placeholder="Full Name" required>
         <input type="text" class="input" placeholder="Username" required>
         <input type="password" class="input" placeholder="Password" required>
         <button class="top-left">Back</button>
         <button class="top-right">Save</button>
+        
+
         </form>
     </div>
 </div>
