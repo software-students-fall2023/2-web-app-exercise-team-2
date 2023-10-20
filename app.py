@@ -123,8 +123,6 @@ def show_editscreen(recipe_name):
         return render_template('editscreen.html', recipe_name=recipe_name)
     elif request.method == 'POST': #user's decision to save or not
 
-
-
 @app.route('/editscreen/<recipe_name>', methods=['GET', 'POST'])
 def show_editscreen(recipe_name):
     username = session.get('username')
