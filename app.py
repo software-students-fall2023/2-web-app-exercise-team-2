@@ -1,13 +1,12 @@
 import sys
 import os
 import logging
-from flask import Flask, render_template, request, redirect, abort, url_for, make_response
+from flask import Flask, render_template, request, redirect, abort, url_for, make_response, session
 import pymongo
-from dotenv import load_dotenv
+from dotenv import load_dotenv 
 import datetime
 from bson.objectid import ObjectId
 from pymongo.errors import ConfigurationError
-
 
 app = Flask(__name__)
 load_dotenv()
@@ -16,7 +15,6 @@ token = os.getenv('DB_CONNECTION_STRING')
 logging.basicConfig(filename='error.log', level=logging.ERROR)
 
 #* Connected to MongoDB Database.
-
 
 try:
   client = pymongo.MongoClient(token)
@@ -88,7 +86,7 @@ def createprofile():
 
 # view main recipe screen
 @app.route('/mainscreen')
-def view_mainscreen():
+def view_mainscreen(): 
     username = session.get('username')
     user_data = users.find_one({"username": username})
     if user_data and 'recipes' in user_data:
@@ -118,11 +116,63 @@ def show_addscreen():
         users.update_one({"username": username}, {"$push": {"recipes": new_recipe}}) #$push is MongoDB operator that appens this value into recipes array
         return redirect(url_for('mainscreen'))
 
-
 # view edit recipe screen
-@app.route('/editscreen')
-def show_editscreen():
-    return render_template('editscreen.html')
+@app.route('/editscreen/<recipe_name>', methods=['GET', 'POST']) #need to add "Edit" button with a link to /editscreen/<recipe_name> per recipe !frontend thing!
+def show_editscreen(recipe_name):
+    if request.method == 'GET': #default screen to show edit recipe screen
+        return render_template('editscreen.html', recipe_name=recipe_name)
+    elif request.method == 'POST': #user's decision to save or not
+
+
+
+@app.route('/editscreen/<recipe_name>', methods=['GET', 'POST'])
+def show_editscreen(recipe_name):
+    username = session.get('username')
+    user_data = users.find_one({"username": username})
+    
+    current_recipe = None
+    for recipe in user_data['recipes']:
+        if recipe['name'] == recipe_name:
+            current_recipe = recipe
+            break
+
+@app.route('/editscreen/<recipe_name>', methods=['GET', 'POST'])
+def show_editscreen(recipe_name):
+    username = session.get('username')
+    user_data = users.find_one({"username": username})
+    
+    current_recipe = None
+    for recipe in user_data['recipes']: #getting specific recipe
+        if recipe['name'] == recipe_name:
+            current_recipe = recipe
+            break
+    
+    if request.method == 'GET': 
+        return render_template('editscreen.html', recipe=current_recipe)
+    
+    elif request.method == 'POST': #if user's clicks on save button
+        updated_name = request.form['recipe_name']
+        updated_cook_time = request.form['cook_time']
+        updated_ingredients = request.form['ingredients']
+        updated_instructions = request.form['instructions']
+
+        #updating
+        current_recipe['name'] = updated_name
+        current_recipe['cook_time'] = updated_cook_time
+        current_recipe['ingredients'] = updated_ingredients
+        current_recipe['instructions'] = updated_instructions
+
+        #pushing updated recipe into the database
+        users.update_one(
+            {"username": username, "recipes.name": recipe_name},
+            {"$set": {
+                "recipes.$.name": updated_name,
+                "recipes.$.cook_time": updated_cook_time,
+                "recipes.$.ingredients": updated_ingredients,
+                "recipes.$.instructions": updated_instructions
+            }}
+        )
+        return redirect(url_for('mainscreen'))
 
 # view delete recipe screen
 @app.route('/deletescreen/<recipe_id>', methods=['GET', 'POST']) #need recipe_id for specific recipe deletion
@@ -147,7 +197,3 @@ def show_recipescreen(recipe_name):
 @app.route('/createprofile', methods=['GET'])
 def show_createprofile():
     return render_template('createprofile.html')
-
-
-
-
