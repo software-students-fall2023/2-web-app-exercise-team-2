@@ -108,7 +108,19 @@
             background-position: center;
             color: grey;
         }
-
+        .input {
+        width: 95%;
+        left: 10px;
+        height: 25px;
+        top: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        color: black;
+        box-sizing: border-box;
+        position: relative;
+        }
         .button-container{
             width: 390px;
         }
@@ -132,7 +144,9 @@
     <div class="phone-container">
         <button class="top-left" type = "button" onclick = "window.location.href='{{url_for('view_dashboard')}}'">Log out</button>
         <div class="title">Recipes</div>
+        
         <div class="container">
+            <input type="text" class="input" placeholder="Search By Recipe Name" required>
             <div class="recipe">
                 <div class="recipe-title">Pasta</div>
                 <div class="recipe-photo">Photo here</div>
