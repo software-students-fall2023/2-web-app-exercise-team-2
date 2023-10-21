@@ -176,8 +176,8 @@
                             placeholder="photo" />
                     </div>
 
-                    <input type="text" class="input ingredients" placeholder="Ingredients" required value="{{ recipe.ingredients }}">
-                    <input type="text" class="input instructions" placeholder="Instructions" required value=" {{ recipe.instructions }}">
+                    <input type="text" name="ingredients" class="input ingredients" placeholder="Ingredients" required value="{{ recipe.ingredients }}">
+                    <input type="text" name="instructions" class="input instructions" placeholder="Instructions" required value=" {{ recipe.instructions }}">
                     <input type="text" name="cook_time" class="input" placeholder="Cooking time" required value="{{ recipe.cook_time }}">
                     <button class="button">Save</button>
                 </form>
