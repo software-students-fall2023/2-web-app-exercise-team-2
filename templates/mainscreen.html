@@ -52,7 +52,7 @@
         .top-left {
             position: absolute;
             top: 2em;
-            left: 1em;
+            left: 1.5em;
             background-color: slateblue;
             border-radius: 5px;
             border: 0;
@@ -94,6 +94,7 @@
         .recipe-title {
             font-size: 25px;
             text-align: center;
+            margin-bottom: 5px;
         }
 
         .recipe-photo {
@@ -136,12 +137,32 @@
             padding: 10px;
             box-sizing: border-box;
             font-weight: bold;
+            margin-top: 10px;
         }
+        .add-recipe-button {
+            position: absolute;
+            top: 1.25em;
+            right: 1em;
+            background-color: slateblue;
+            border: none;
+            border-radius: 50%;
+            width: 1.5em;
+            height: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+        }
+
     </style>
 </head>
 
 <body>
     <div class="phone-container">
+        <button class="add-recipe-button" onclick="window.location.href='{{url_for('show_addscreen')}}'">+</button>
         <button class="top-left" type = "button" onclick = "window.location.href='{{url_for('view_dashboard')}}'">Log out</button>
         <div class="title">Recipes</div>
         
@@ -166,6 +187,21 @@
                     <button class="recipe-button">Delete</button>
                 </div>
             </div>
+
+            <!-- Dynamic Recipe Cards from Database -->
+            {% for recipe in recipes %}
+            <div class="recipe">
+                <div class="recipe-title">{{ recipe.name }}</div>
+                <div class="recipe-photo">Photo here</div>
+                <div class="button-container">
+                    <button class="recipe-button">View</button>
+                    <a href="{{ url_for('show_editscreen', recipe_name=recipe.name) }}">
+                        <button class="recipe-button">Edit</button>
+                    </a>
+                    <button class="recipe-button">Delete</button>
+                </div>
+            </div>
+            {% endfor %}
 
         </div>
     </div>

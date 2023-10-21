@@ -167,8 +167,8 @@
         <div class="title">Edit screen</div>
         <div class="container">
             <div class="recipe">
-                <form class="form" action="/editscreen" method="post">
-                    <input type="name" class="input" placeholder="Recipe name" required>
+                <form class="form" action="/editscreen/{{ recipe.name }}" method="post">
+                    <input type="text" name="recipe_name" class="input" placeholder="Recipe name" required value="{{ recipe.name }}">
 
                     <div class="photoContainer">
                         Upload photo
@@ -176,10 +176,10 @@
                             placeholder="photo" />
                     </div>
 
-                    <textarea type="description" class="input description" placeholder="Recipe description"></textarea>
-                    <textarea type="instructions" class="input description" placeholder="Instructions"
-                        required></textarea>
-                    <input type="name" class="input" placeholder="Cooking time" required>
+                    <textarea name="ingredients" class="input ingredients" placeholder="Ingredients">{{ recipe.ingredients }}</textarea>
+                    <textarea name="instructions" class="input instructions" placeholder="Instructions"
+                        required>{{ recipe.instructions }}</textarea>
+                    <input type="text" name="cook_time" class="input" placeholder="Cooking time" required value="{{ recipe.cook_time }}">
                     <button class="button">Save</button>
                 </form>
             </div>

@@ -79,9 +79,10 @@
             color: black;
             box-sizing: border-box;
             margin-bottom: 10px;
+            font-family: Arial, sans-serif;
         }
 
-        .input.description {
+        .input.ingredients {
             height: 100px;
             font-family: Arial, sans-serif;
         }
@@ -161,19 +162,19 @@
         <div class="title">Add screen</div>
         <div class="container">
             <div class="recipe">
-                <form class="form" action="/editscreen" method="post">
-                    <input type="name" class="input" placeholder="Recipe name" required>
+                <form class="form" action="/addscreen" method="post">
+                    <input type="text" name="recipe_name" class="input" placeholder="Recipe name" required>
 
                     <div class="photoContainer">
                         Upload photo
-                        <input type="file" class="hiddenFileInput" accept="image/jpeg, image/png, image/gif, image/bmp"
+                        <input type="file" name="photo" class="hiddenFileInput" accept="image/jpeg, image/png, image/gif, image/bmp"
                             placeholder="photo" />
                     </div>
 
-                    <textarea type="description" class="input description" placeholder="Recipe description"></textarea>
-                    <textarea type="instructions" class="input description" placeholder="Instructions"
+                    <textarea name="ingredients" class="input ingredients" placeholder="Ingredients"></textarea>
+                    <textarea name="instructions" class="input instructions" placeholder="Instructions"
                         required></textarea>
-                    <input type="name" class="input" placeholder="Cooking time" required>
+                    <input type="text" name="cook_time" class="input" placeholder="Cooking time" required>
                     <button class="button">Save</button>
                 </form>
             </div>
