@@ -12,18 +12,19 @@ class User:
         self.password = password
         self.age = age
         self.recipes = [Recipe] if Recipe is not None else [] 
-    def str(self):
+    def __str__(self):
         print(f"{self.name} with {self.username}")
         
     class Recipe:
-        name = None
-        cookTime = None
-        ingredients = []
+        # name = None
+        # cookTime = None
+        # ingredients = []
         
-        def __init__(self, name, ingredients, cookTime=None):
+        def __init__(self, name, ingredients,instructions, cook_time=None):
             self.name = name
-            self.cookTime = cookTime
-            ingredients = ingredients
+            self.cook_time = cook_time
+            self.ingredients = ingredients
+            self.instructions = instructions
 # class Recipe:
 #     def __init__(self, name, ingredients, instructions, cook_time=None):
 #         self.name = name

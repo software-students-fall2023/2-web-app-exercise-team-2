@@ -52,26 +52,26 @@ def map_json_to_user(json_obj):
         username = json_obj.get("username")
         age = json_obj.get("age")
         password = json_obj.get("password")
-        recipes = json_obj.get("recipes", {})
-        u = User(name, username, age, recipes)
-        logger.info(f"{u} was created")
+        recipes = json_obj.get("recipes", [])
+
+        u = User(name, username, password, age, recipes)
+        logger.info(f"{u.name} was created")  
         return u
+
     except Exception as e:
-        logger.error("MAPPING ERROR: error in mapping JSON to user.")
-
-# def map_json_to_user(json_obj):
-#     try:
-#         name = json_obj.get("name")
-#         username = json_obj.get("username")
-#         age = json_obj.get("age")
-#         password = json_obj.get("password")
-#         recipes_json = json_obj.get("recipes", [])
-#         recipes = [Recipe(r['name'], r['ingredients'], r.get('cookTime')) for r in recipes_json]
-#         u = User(name, username, password, age, recipes)
-#         return u
-#     except Exception as e:
-#         logger.error("MAPPING ERROR: error in mapping JSON to user.")
-
+        logger.error(f"MAPPING ERROR: Error in mapping JSON to user. Details: {e}")
+        return None
+    # try:
+    #     name = json_obj.get("name")
+    #     username = json_obj.get("username")
+    #     age = json_obj.get("age")
+    #     password = json_obj.get("password")
+    #     recipes = json_obj.get("recipes", {})
+    #     u = User(name, username, age, recipes)
+    #     logger.info(f"{u} was created")
+    #     return u
+    # except Exception as e:
+    #     logger.error("MAPPING ERROR: error in mapping JSON to user.")
 
 def map_user_to_json(user):
     try:
@@ -85,19 +85,7 @@ def map_user_to_json(user):
         return user_data
     except Exception as e:
         logger.error("MAPPING ERROR: error in mapping user to JSON.")
-# def map_user_to_json(user):
-#     try:
-#         user_recipes = [{'name': r.name, 'cookTime': r.cookTime, 'ingredients': r.ingredients} for r in user.recipes]
-#         user_data = {
-#             "name": user.name,
-#             "username": user.username,
-#             "age": user.age,
-#             "password": user.password,
-#             "recipes": user_recipes
-#         }
-#         return user_data
-#     except Exception as e:
-#         logger.error("MAPPING ERROR: error in mapping user to JSON.")
+
         
 def map_userRecipes_to_jsonRecipes(user):
     try:
@@ -114,6 +102,7 @@ def map_userRecipes_to_jsonRecipes(user):
         return user_recipes
     except Exception as e:
         logger.error(f"Mapping error: {e}")
+
 @app.route('/')
 def view_dashboard():
     return render_template('index.html')
@@ -146,7 +135,7 @@ def login():
     if profile:
         currUser = map_json_to_user(profile)  #saving username in session so it can be used in other functions == not localized
         logger.info(f"User has been logged in with username: ({currUser.username}) .")
-        return redirect(url_for('mainscreen'))
+        return redirect(url_for('view_mainscreen'))
     else:
         #Todo: Change to printing "incorrect username or password"
         return redirect(url_for('createprofile'))
@@ -168,20 +157,16 @@ def createprofile():
         flash("User already exists", "error") #flash method to show a message
         return redirect(url_for('createprofile'))
     else:
-        if user_exists:
-            flash("User already exists. Please try again.", 'error')
+        try:
+            currUser = User(name, username, password)
+            jsonUser = map_user_to_json(currUser)
+            # logger.info(f"Successfully created JSON User to be inserted in database with username {jsonUser.get(username)} .")
+            users.insert_one(jsonUser)
+            return redirect(url_for('view_mainscreen'))
+        except Exception as e:
+            logger.error(f"Error in creating profile: Unsuccessfull profile creation. Error code: {e}")
             return render_template("createprofile.html")
-        else:
-            try:
-                currUser = User(name, username, password)
-                jsonUser = map_user_to_json(currUser)
-                # logger.info(f"Successfully created JSON User to be inserted in database with username {jsonUser.get(username)} .")
-                users.insert_one(jsonUser)
-                return redirect(url_for('view_mainscreen'))
-            except Exception as e:
-                logger.error(f"Error in creating profile: Unsuccessfull profile creation. Error code: {e}")
-                return render_template("createprofile.html")
-        
+    
 
 # view main recipe screen
 app.debug = True
@@ -191,11 +176,20 @@ def view_mainscreen():
     #If none then redirect to mainpage
     if currUser is None:
         return render_template("index.html")
-    #else continue
-    #todo: Stress test for 0 recipes and for 1 recipe
+    
+    #getting recipes from the database
+    user_data = users.find_one({"username": currUser.username})
+    if user_data:
+        recipes_from_db = user_data.get('recipes', [])
+    else:
+        recipes_from_db = []
+
+    return render_template('mainscreen.html', recipes=recipes_from_db)
+
+
     # if len(currUser.recipes) > 0: #this returns error currently because currUser.recipes is a dictionary need to fix
     #     return render_template('mainscreen.html', recipes=currUser.recipes)
-    return render_template('mainscreen.html')
+    #return render_template('mainscreen.html')
 
 # view add recipe screen
 app.debug = True
@@ -231,15 +225,14 @@ app.debug = True
 @app.route('/editscreen/<recipe_name>', methods=['GET', 'POST'])
 def show_editscreen(recipe_name):
     global currUser
-    # username = session.get('username')
-    # user_data = users.find_one({"username": username})
     
     if currUser is None:
         return redirect(url_for('login'))
     
     current_recipe = None
-    for recipe in currUser.get('recipes', []):
-        if recipe.get('name') == recipe_name:
+    for recipe in currUser.recipes:
+        print(recipe)
+        if recipe['name'] == recipe_name:
             current_recipe = recipe
             break
     
@@ -258,17 +251,16 @@ def show_editscreen(recipe_name):
         current_recipe['ingredients'] = updated_ingredients
         current_recipe['instructions'] = updated_instructions
 
-        index = next((i for i, recipe in enumerate(currUser.get('recipes', [])) if recipe.get('name') == recipe_name), None)
+        index = next((i for i, recipe in enumerate(currUser.recipes) if recipe['name'] == recipe_name), None)
 
         if index is not None:
-            currUser['recipes'][index] = current_recipe
+            currUser.recipes[index] = current_recipe
             users.update_one(
-                {"username": currUser['username'], "recipes.name": recipe_name},
+                {"username": currUser.username, "recipes.name": recipe_name},  # Modified this line to access the username attribute
                 {"$set": {
                     "recipes.$": current_recipe
                 }}
             )
-
         return redirect(url_for('view_mainscreen'))
 
 # view delete recipe screen
