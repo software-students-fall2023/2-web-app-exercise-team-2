@@ -54,7 +54,8 @@ def map_json_to_user(json_obj):
         password = json_obj.get("password")
         recipes = json_obj.get("recipes", [])
 
-        u = User(name, username, password, age, recipes)
+        u = User(name, username, password, age)
+        u.recipes = recipes
         logger.info(f"{u.name} was created")  
         return u
 
@@ -231,7 +232,6 @@ def show_editscreen(recipe_name):
     
     current_recipe = None
     for recipe in currUser.recipes:
-        print(recipe)
         if recipe['name'] == recipe_name:
             current_recipe = recipe
             break
@@ -278,11 +278,19 @@ def show_deletescreen(recipe_name): #need to pass recipe_id as an arugment
 
 #viewing specific recipe
 app.debug = True
-@app.route('/recipescreen/<recipe_name>')
+@app.route('/viewRecipe/<recipe_name>')
 def show_recipescreen(recipe_name):
-    username = currUser.email
-    user_data = users.find_one({"username": username})
-    return render_template('viewscreen.html',recipe_name=recipe_name)
+    global currUser
+    
+    if currUser is None:
+        return redirect(url_for('login'))
+    
+    current_recipe = None
+    for recipe in currUser.recipes:
+        if recipe['name'] == recipe_name:
+            current_recipe = recipe
+            break
+    return render_template('viewRecipe.html',recipe=current_recipe)
 
 # view profile that is already created
 app.debug = True

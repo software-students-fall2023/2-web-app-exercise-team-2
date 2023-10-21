@@ -163,7 +163,7 @@
 
 <body>
     <div class="phone-container">
-        <button class="top-left">Back</button>
+        <button class="top-left" onclick="goBack()">Back</button>
         <div class="title">Edit screen</div>
         <div class="container">
             <div class="recipe">
@@ -176,7 +176,7 @@
                             placeholder="photo" />
                     </div>
 
-                    <input type="text" class="input ingredients" placeholder="Ingredients" value="{{ recipe.ingredients }}">
+                    <input type="text" class="input ingredients" placeholder="Ingredients" required value="{{ recipe.ingredients }}">
                     <input type="text" class="input instructions" placeholder="Instructions" required value=" {{ recipe.instructions }}">
                     <input type="text" name="cook_time" class="input" placeholder="Cooking time" required value="{{ recipe.cook_time }}">
                     <button class="button">Save</button>
@@ -185,6 +185,11 @@
         </div>
 
     </div>
+    <script>
+        function goBack() {
+            window.location.href = "/mainscreen";
+        }
+    </script>
 </body>
 
 </html>

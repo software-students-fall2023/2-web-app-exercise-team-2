@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html>
-    <style>
-        @font-face {
-            font-family: 'P22 Mackenzie Bold';
-            src: url('path_to_your_font/P22MackenzieBold.otf') format('opentype');
-            font-weight: bold;
-            font-style: normal;
-        }
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Recipe</title>
+    <style>
         body {
-            font-family: 'P22 Mackenzie Bold', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 110vh;
+            height: 100vh;
             font-weight: bold;
         }
 
@@ -30,7 +28,6 @@
             line-height: 1.5em;
         }
 
-
         .phone-container {
             position: relative;
             width: 390px;
@@ -45,6 +42,116 @@
             overflow: hidden;
         }
 
+        .container {
+            width: 22.5em;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            overflow-x: auto;
+            white-space: nowrap;
+
+        }
+
+        .form {
+            flex-direction: column;
+            display: flex;
+            padding: 10px;
+            justify-content: space-between;
+
+        }
+
+        .title {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5em;
+        }
+
+        .input {
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            color: black;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        .input.ingredients {
+            background-color: white;
+            color: black;
+            height: 100px;
+            font-family: Arial, sans-serif;
+        }
+
+        .input.instructions{
+            background-color: white;
+            color: black;
+            height: 100px;
+            font-family: Arial, sans-serif;
+        }
+
+        .button {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            color: black;
+            font-size: 16px;
+            background-color: lavender;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .recipe {
+            flex: 1 1 150px;
+            background-color: slateblue;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .file {
+            margin-bottom: 10px;
+
+        }
+
+        ::placeholder {
+            color: grey;
+            font-weight: bold;
+        }
+
+        .photoContainer {
+            border-radius: 5px;
+            width: 100%;
+            height: 10em;
+            border: none;
+            background-color: white;
+            color: grey;
+            cursor: pointer;
+            font-size: 16px;
+            margin: auto;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hiddenFileInput {
+            position: absolute;
+            width: 340px;
+            height: 160px;
+            border-radius: 5px;
+            opacity: 0;
+            background-color: black;
+        }
+
         .top-left {
             position: absolute;
             top: 2em;
@@ -57,112 +164,62 @@
             color: white;
             padding: 5px;
         }
+    </style>
+</head>
 
-        .container {
-            margin-top: auto;
-            height: 85%;
-            width: 22.5em;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
+<body>
+    <div class="phone-container">
+        <button class="top-left" onclick="goBack()">Back</button>
+        <div class="title">View Recipe</div>
+        <div class="container">
+            <div class="recipe">
+                <form class="form">
+                    <div class="input">
+                    {{ recipe.name }}
+                    </div>
 
-        .recipe {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            position: relative;
-            flex: auto;
-            background-color: slateblue;
-            color: white;
-            height: 30em;
-            text-align: center;
-            border-radius: 5px;
-            margin: 10px;
+                    <div class="photoContainer">
+                        <img src="pasta.jpg" alt="Recipe Image" class="recipe-image">
+                    </div>
+                    
+                    <div class="input ingredients">
+                        {{ recipe.ingredients }}
+                    </div>
+                    
+                    <div class="input instructions">
+                        {{ recipe.instructions }}
+                    </div>
+
+                    <div class="input">
+                        {{ recipe.cook_time }}
+                    </div>
+                </div>
+            </div>
+    </div>
+    <style>
+        .recipe-name,
+        .ingredients,
+        .instructions,
+        .cook-time {
+            background-color: #f0f0f0;
             padding: 10px;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-
-        .recipe-title {
-            font-size: 16px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
-
-        .recipe-photo {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-            flex: 0 0 40%;
-            width: 100%;
-            margin-top: 10px;
-            border-radius: 5px;
-            background-color: white;
-            background-size: cover;
-            background-position: center;
-            color: grey;
-        }
-
-        .recipe-description {
-            word-wrap: break-word;
-            flex: 0 0 40%;
-            width: 100%;
-            box-sizing: border-box;
-            background-color: white;
-            border-radius: 5px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-
-
-        .input {
-            width: 100%;
-            padding: 10px;
+            border-radius: 4px;
             margin-bottom: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            color: black;
-            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
-        .recipe-button{
-            flex: 0 0 40%;
-            width: 100%;
-            padding: 10px 15px;
-            margin-top: 10px;
-            border-radius: 4px;
-            border: none;
-            color: black;
-            display: inline-block;
-            width: 90px;
-            box-sizing: border-box;
-            font-weight: bold;
+        .recipe-image {
+            width: 100%; 
+            max-height: 200px;
+            object-fit: cover; 
+            border-radius: 5px;
         }
     </style>
-<head>
-    <meta charset="UTF-8">
-</head>
-<div class="phone-container">
-    <div class="container">
-        <button class="top-left">Back</button>
+    <script>
+        function goBack() {
+            window.location.href = "/mainscreen";
+        }
+    </script>
+</body>
 
-        <div class="recipe">
-            <div class="recipe-title">Recipe title</div>
-            <div class="recipe-photo">Photo here</div>
-            <div class="recipe-description">dfgdfgfgfdgdfgdfgdfdfsdfsdfsdg</div>
-            <div class="button-container">
-                <button class="recipe-button">View</button>
-                <button class="recipe-button">Edit</button>
-                <button class="recipe-button">Delete</button>
-            </div>
-        </div>
-</div>
 </html>

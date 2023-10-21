@@ -195,7 +195,8 @@
                     <div class="recipe-title">{{ recipe.name }}</div>
                     <div class="recipe-photo">Photo here</div>
                     <div class="button-container">
-                        <button class="recipe-button">View</button>
+                        <a href="{{ url_for('show_recipescreen', recipe_name=recipe.name) }}">
+                            <button class="recipe-button">View</button>
                         <a href="{{ url_for('show_editscreen', recipe_name=recipe.name) }}">
                             <button class="recipe-button">Edit</button>
                         </a>
