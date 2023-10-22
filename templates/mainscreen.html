@@ -178,7 +178,8 @@
         <div class="title">Recipes</div>
         
         <div class="container">
-        <input type="text" class="input" placeholder="Search By Recipe Name" required>
+        <!-- <input type="text" class="input" placeholder="Search By Recipe Name" required> -->
+        <input type="text" id="searchInput" class="input" placeholder="Search By Recipe Name" required onkeydown="filterRecipes(event)">
             <!-- dynamic recipe cards from DB -->
             {% if recipes %}
                 {% for recipe in recipes %}
@@ -207,6 +208,34 @@
         </div>
         </div>
     </div>
+    <script>
+        function filterRecipes(event) {
+            let input = document.getElementById('searchInput');
+            
+            if (event.keyCode === 13) { //checking enter key pressed
+                if (!input.value.trim()) {
+                    alert("Search field is required!");
+                    event.preventDefault();
+                } else {
+                    let filter = input.value.toUpperCase();
+                    let recipes = document.getElementsByClassName('recipe');
+
+                    for(let i = 0; i < recipes.length; i++) {
+                        let recipeTitle = recipes[i].getElementsByClassName('recipe-title')[0];
+                        if (recipeTitle) {
+                            let txtValue = recipeTitle.textContent || recipeTitle.innerText;
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                recipes[i].style.display = "flex";
+                            } else {
+                                recipes[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        </script>
+        
 </body>
 
 </html>
