@@ -39,16 +39,16 @@
             align-items: center;
             border-radius: 25px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            /* overflow: hidden; */
         }
 
         .container {
             width: 22.5em;
             display: flex;
-            flex-wrap: wrap;
+            /* flex-wrap: wrap; */
             justify-content: space-between;
-            overflow-x: auto;
-            white-space: nowrap;
+            /* overflow-x: auto; */
+            /* white-space: wrap; */
 
         }
 
@@ -74,6 +74,7 @@
 
         .input {
             background-color: white;
+            width: 100%;
             color: black;
             padding: 10px;
             border-radius: 4px;
@@ -82,20 +83,12 @@
             box-sizing: border-box;
             margin-bottom: 10px;
             font-family: Arial, sans-serif;
+            word-wrap: break-word;
+            max-width: fit-content(50%);
         }
 
-        .input.ingredients {
-            background-color: white;
-            color: black;
+        .input.ingredients, .input.instructions {
             height: 100px;
-            font-family: Arial, sans-serif;
-        }
-
-        .input.instructions{
-            background-color: white;
-            color: black;
-            height: 100px;
-            font-family: Arial, sans-serif;
         }
 
         .button {
