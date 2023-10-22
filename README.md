@@ -5,9 +5,9 @@ A little exercise to build a web application following an agile development proc
 ## Setup Instructions
 To setup environment make sure to download the following:
 
-{Install PyMongo.}{https://pypi.org/project/pymongo/}
-{Install Flask.}{https://pypi.org/project/Flask/}
-{Install Certifi.}{https://pypi.org/project/certifi/}
+Install PyMongo. https://pypi.org/project/pymongo/ <p>
+Install Flask. https://pypi.org/project/Flask/ <p>
+Install Certifi. https://pypi.org/project/certifi/ <p>
 
 1) Make sure that you have all the modules installed.
 
