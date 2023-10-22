@@ -21,11 +21,12 @@ Empower home cooks with a user-friendly app to effortlessly add, modify, manage,
 
 ## User stories
 
-As a mom, I want to save my own custom recipes easily so that I can cook toddler-friendly foods.
-As a home cook, I want to add new recipes so that I can store and revisit my favorite dishes.
-As a recipe enthusiast, I want to edit existing recipes so that I can make improvements or adjustments based on my preferences.
-As a user, I want to delete recipes so that I can remove dishes I no longer need or like.
-​​As a culinary student, I want to add notes to recipes so that I can remember specific techniques or variations I've tried.
+- As a mom, I want to save my own custom recipes easily so that I can cook toddler-friendly foods.
+- As a home cook, I want to add new recipes so that I can store and revisit my favorite dishes.
+- As a recipe enthusiast, I want to edit existing recipes so that I can make improvements or adjustments based on my preferences.
+- As a user, I want to delete recipes so that I can remove dishes I no longer need or like.
+- ​​As a culinary student, I want to add notes to recipes so that I can remember specific techniques or variations I've tried.
+
 
 ## Task boards
 
