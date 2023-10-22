@@ -50,20 +50,35 @@
         box-sizing: border-box;
     }
     .button {
-        width: 100%;
-        background-color: #E6E6FA;
-        color: black;
-        padding: 10px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        box-sizing: border-box;
-    }
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: none;
+    background-color: slateblue;
+    color: white;
+    box-sizing: border-box;
+    text-decoration: none; 
+    text-align: center;
+    font-weight: normal; 
+    font-size: 16px; 
+}
 </style>
 </head>
 
     
 <body>
+    {% with messages = get_flashed_messages(category_filter=['login_error']) %}
+    {% if messages %}
+        <script>
+            window.onload = function() {
+                incorrectUorP();
+            }
+        </script>
+    {% endif %}
+{% endwith %}
+
 <div class="phone-container">
     <div class="container">
         <div class="title">Login</div>
@@ -75,8 +90,10 @@
         </form>
     </div>
 </div>
+
 </body>
 </html>
+
 <script>
     function incorrectUorP() {
       alert("Incorrect Username or Password! Please try Again or Create a Profile.");

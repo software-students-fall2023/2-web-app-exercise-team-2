@@ -62,17 +62,6 @@ def map_json_to_user(json_obj):
     except Exception as e:
         logger.error(f"MAPPING ERROR: Error in mapping JSON to user. Details: {e}")
         return None
-    # try:
-    #     name = json_obj.get("name")
-    #     username = json_obj.get("username")
-    #     age = json_obj.get("age")
-    #     password = json_obj.get("password")
-    #     recipes = json_obj.get("recipes", {})
-    #     u = User(name, username, age, recipes)
-    #     logger.info(f"{u} was created")
-    #     return u
-    # except Exception as e:
-    #     logger.error("MAPPING ERROR: error in mapping JSON to user.")
 
 def map_user_to_json(user):
     try:
@@ -138,8 +127,8 @@ def login():
         logger.info(f"User has been logged in with username: ({currUser.username}) .")
         return redirect(url_for('view_mainscreen'))
     else:
-        #Todo: Change to printing "incorrect username or password"
-        return redirect(url_for('createprofile'))
+        flash("Incorrect login credentials.", "login_error")
+        return redirect(url_for('generate_login_page'))
 
 @app.route('/createprofile', methods=['GET'])
 def show_createprofile_form():
@@ -188,10 +177,6 @@ def view_mainscreen():
     return render_template('mainscreen.html', recipes=recipes_from_db)
 
 
-    # if len(currUser.recipes) > 0: #this returns error currently because currUser.recipes is a dictionary need to fix
-    #     return render_template('mainscreen.html', recipes=currUser.recipes)
-    #return render_template('mainscreen.html')
-
 # view add recipe screen
 app.debug = True
 @app.route('/addscreen', methods=['GET', 'POST'])
@@ -206,7 +191,7 @@ def show_addscreen():
         cook_time = request.form['cook_time']
         ingredients = request.form['ingredients'] #any format, should wef specify? => REACH goal
         instructions = request.form['instructions'] #parsing => REACH goal
-        #currUser.recipes.ingredients()
+
         #creating the JSON(?) object for the new recipe
         new_recipe = {
             "name": recipe_name,
@@ -216,10 +201,7 @@ def show_addscreen():
         }
         #assuming the user is already logged in & you have their username available
         users.update_one({"username": currUser.username}, {"$push": {"recipes": new_recipe}}) #$push is MongoDB operator that appens this value into recipes array
-        #currUser = users.find_one({"username": currUser.username})
-        #recipes_from_db = currUser.recipes
         logger.info("No error so far in recipe addition")
-        #return render_template('mainscreen.html', recipes=recipes_from_db)
         return redirect(url_for('view_mainscreen'))
 
 app.debug = True 
@@ -300,7 +282,25 @@ def show_recipescreen(recipe_name):
     return render_template('viewRecipe.html',recipe=current_recipe)
 
 # view profile that is already created
-app.debug = True
 @app.route('/createprofile', methods=['GET'])
 def show_createprofile():
     return render_template('createprofile.html')
+
+@app.route('/mainscreen', methods=['POST'])
+def search_recipe(query):
+    try:
+        results = users.find({"recipes.name": {"$regex": query, "$options": "i"}})
+        
+        matching_recipes = []
+        for user in results:
+            for recipe in user.get("recipes", []):
+                if query.lower() in recipe["name"].lower():
+                    matching_recipes.append(recipe)
+        
+        return matching_recipes
+    
+    except Exception as e:
+        logger.error(f"SEARCH ERROR: Problem searching for recipes with query '{query}'. Details: {e}")
+        return []
+    
+
