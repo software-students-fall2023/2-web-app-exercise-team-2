@@ -211,31 +211,32 @@
     <script>
         function filterRecipes(event) {
             let input = document.getElementById('searchInput');
-            
-            if (event.keyCode === 13) { //checking enter key pressed
-                if (!input.value.trim()) {
-                    alert("Search field is required!");
-                    event.preventDefault();
-                } else {
-                    let filter = input.value.toUpperCase();
-                    let recipes = document.getElementsByClassName('recipe');
 
-                    for(let i = 0; i < recipes.length; i++) {
-                        let recipeTitle = recipes[i].getElementsByClassName('recipe-title')[0];
-                        if (recipeTitle) {
-                            let txtValue = recipeTitle.textContent || recipeTitle.innerText;
-                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                recipes[i].style.display = "flex";
-                            } else {
-                                recipes[i].style.display = "none";
-                            }
+            if (event.keyCode === 13) { //checking enter
+                event.preventDefault();
+                let filter = input.value.toUpperCase();
+                let recipes = document.getElementsByClassName('recipe');
+                let foundMatch = false;
+
+                for (let i = 0; i < recipes.length; i++) {
+                    let recipeTitle = recipes[i].getElementsByClassName('recipe-title')[0];
+                    if (recipeTitle) {
+                        let txtValue = recipeTitle.textContent || recipeTitle.innerText;
+                        if (!input.value.trim() || txtValue.toUpperCase().indexOf(filter) > -1) {
+                            recipes[i].style.display = "flex";
+                            foundMatch = true;
+                        } else {
+                            recipes[i].style.display = "none";
                         }
                     }
                 }
+                if (!foundMatch && input.value.trim()) {
+                    alert("No such recipe exists!");
+                    location.reload();
+                }
             }
         }
-        </script>
-        
+        </script>   
 </body>
 
 </html>
