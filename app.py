@@ -216,11 +216,11 @@ def show_addscreen():
         }
         #assuming the user is already logged in & you have their username available
         users.update_one({"username": currUser.username}, {"$push": {"recipes": new_recipe}}) #$push is MongoDB operator that appens this value into recipes array
-        currUser = users.find_one({"username": currUser.username})
-        recipes_from_db = currUser.get('recipes', [])
+        #currUser = users.find_one({"username": currUser.username})
+        #recipes_from_db = currUser.recipes
         logger.info("No error so far in recipe addition")
-        return render_template('mainscreen.html', recipes=recipes_from_db)
-        #return redirect(url_for('view_mainscreen'))
+        #return render_template('mainscreen.html', recipes=recipes_from_db)
+        return redirect(url_for('view_mainscreen'))
 
 app.debug = True 
 @app.route('/editscreen/<recipe_name>', methods=['GET', 'POST'])
@@ -263,18 +263,22 @@ def show_editscreen(recipe_name):
             )
         return redirect(url_for('view_mainscreen'))
 
-# view delete recipe screen
-app.debug = True
-@app.route('/deletescreen/<recipe_id>', methods=['GET', 'POST']) #need recipe_id for specific recipe deletion
+# delete recipe screen
+@app.route('/deletescreen/<recipe_name>', methods=['GET', 'POST'])
 def show_deletescreen(recipe_name): #need to pass recipe_id as an arugment
+    global currUser
+    current_recipe = None
+    for recipe in currUser.recipes:
+        if recipe['name'] == recipe_name:
+            current_recipe = recipe
+            break
     if request.method == 'GET': #default screen to show delete recipe screen
-        return render_template('deletescreen.html', recipe_name=recipe_name)
+        return render_template('deleteRecipe.html', recipe_name=recipe_name)
     elif request.method == 'POST': #user's decision to delete or not
         decision = request.form.get('decision')  #on front-end please name the yes or no buttons 'decision 
         if decision == 'yes':
-            username = currUser.email
-            users.update_one({"username": username}, {"$pull": {"recipes": {"name": recipe_name}}}) # delete using the name
-        return redirect(url_for('mainscreen')) #going back to mainscreen
+            users.update_one({"username": currUser.username}, {"$pull": {"recipes": {"name": recipe_name}}}) # delete using the name
+        return redirect(url_for('view_mainscreen')) #going back to mainscreen
 
 #viewing specific recipe
 app.debug = True
@@ -284,6 +288,9 @@ def show_recipescreen(recipe_name):
     
     if currUser is None:
         return redirect(url_for('login'))
+    
+    user_data = users.find_one({"username": currUser.username}) #need to refresh
+    currUser.recipes = user_data['recipes']
     
     current_recipe = None
     for recipe in currUser.recipes:

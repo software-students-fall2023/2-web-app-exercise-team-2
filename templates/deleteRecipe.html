@@ -9,9 +9,10 @@
     <div class="delete-container">
     Would You Like to Delete This Recipe?
     You Cannot Undo this Action.
-    <form method = "POST" action = url_for"{{ url_for('deleterecipe') }}">
-        <button class="Delete-button" type = "submit">Delete</button>
-        <button class="Delete-button2">Back</button>
+    <form method="POST" action="{{ url_for('show_deletescreen', recipe_name=recipe_name) }}">
+        <input type="hidden" name="decision" value="yes">
+        <button class="Delete-button" type="submit">Delete</button>
+        <a href="{{ url_for('view_mainscreen') }}" class="Delete-button2">Back</a>
     </form>
     </div>
 </body>

@@ -156,6 +156,31 @@
             cursor: pointer;
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Black with opacity */
+        }
+
+        .delete-container {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+        }
+
+        .Delete-button, .Delete-button2 {
+            margin-top: 15px;
+        }
+
 
     </style>
 </head>
@@ -197,10 +222,14 @@
                     <div class="button-container">
                         <a href="{{ url_for('show_recipescreen', recipe_name=recipe.name) }}">
                             <button class="recipe-button">View</button>
+                        </a>
+                        
                         <a href="{{ url_for('show_editscreen', recipe_name=recipe.name) }}">
                             <button class="recipe-button">Edit</button>
                         </a>
-                        <button class="recipe-button">Delete</button>
+                        <a href="{{ url_for('show_deletescreen', recipe_name=recipe.name) }}">
+                            <button class="recipe-button">Delete</button>
+                        </a>
                     </div>
                 </div>
                 {% endfor %}
