@@ -255,7 +255,7 @@ def show_deletescreen(recipe_name): #need to pass recipe_id as an arugment
             current_recipe = recipe
             break
     if request.method == 'GET': #default screen to show delete recipe screen
-        return render_template('deleteRecipe.html', recipe_name=recipe_name)
+        return render_template('deleteRecipe.html', recipe=current_recipe)
     elif request.method == 'POST': #user's decision to delete or not
         decision = request.form.get('decision')  #on front-end please name the yes or no buttons 'decision 
         if decision == 'yes':
