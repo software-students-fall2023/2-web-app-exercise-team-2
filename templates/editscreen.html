@@ -174,11 +174,6 @@
                 <form class="form" action="/editscreen/{{ recipe.name }}" method="post">
                     <input type="text" name="recipe_name" class="input" placeholder="Recipe name" required value="{{ recipe.name }}">
 
-                    <div class="photoContainer">
-                        Upload photo
-                        <input type="file" class="hiddenFileInput" accept="image/jpeg, image/png, image/gif, image/bmp"
-                            placeholder="photo" />
-                    </div>
 
                     <input type="text" name="ingredients" class="input ingredients" placeholder="Ingredients" required value="{{ recipe.ingredients }}">
                     <input type="text" name="instructions" class="input instructions" placeholder="Instructions" required value=" {{ recipe.instructions }}">

@@ -75,7 +75,7 @@
             flex: auto;
             background-color: slateblue;
             color: white;
-            height: 20em;
+            height: 8em;
             width: 22.5em;
             text-align: center;
             border-radius: 5px;
@@ -185,7 +185,6 @@
                 {% for recipe in recipes %}
                 <div class="recipe">
                     <div class="recipe-title">{{ recipe.name }}</div>
-                    <div class="recipe-photo">Photo here</div>
                     <div class="button-container">
                         <a href="{{ url_for('show_recipescreen', recipe_name=recipe.name) }}">
                             <button class="recipe-button">View</button>
