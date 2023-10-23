@@ -9,7 +9,9 @@ Install Certifi. https://pypi.org/project/certifi/ <p>
 
 1) Make sure that you have all the modules installed.
 
-2) Run `flask --app app run`.
+2) In a split terminal, run `flask --app app run` in a terminal, and run `cat error.log` in the other terminal.
+
+3) Navigate to the working server shown by `cat error.log` ex. `* Running on http://127.0.0.1:5000`
 
 That's it.
 
