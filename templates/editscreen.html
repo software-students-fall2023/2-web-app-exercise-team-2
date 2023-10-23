@@ -6,15 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit screen</title>
     <style>
-        @font-face {
-            font-family: 'P22 Mackenzie Bold';
-            src: url('path_to_your_font/P22MackenzieBold.otf') format('opentype');
-            font-weight: bold;
-            font-style: normal;
-        }
 
         body {
-            font-family: 'P22 Mackenzie Bold', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             display: flex;
             justify-content: center;
@@ -76,6 +70,16 @@
             margin: 0;
             padding: 0;
             line-height: 1.5em;
+        }
+
+        .recipename {
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            color: black;
+            box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
         .input {
@@ -172,9 +176,11 @@
         <div class="container">
             <div class="recipe">
                 <form class="form" action="/editscreen/{{ recipe.name }}" method="post">
-                    <input type="text" name="recipe_name" class="input" placeholder="Recipe name" required value="{{ recipe.name }}">
-
-
+                    <input type="hidden" name="original_recipe_name" value="{{ recipe.name }}">
+                    <!-- <input type="text" name="recipe_name" class="input" placeholder="Recipe name" required value="{{ recipe.name }}"> -->
+                    <div class="recipename">
+                        {{ recipe.name }}
+                        </div>
                     <input type="text" name="ingredients" class="input ingredients" placeholder="Ingredients" required value="{{ recipe.ingredients }}">
                     <input type="text" name="instructions" class="input instructions" placeholder="Instructions" required value=" {{ recipe.instructions }}">
                     <input type="text" name="cook_time" class="input" placeholder="Cooking time" required value="{{ recipe.cook_time }}">

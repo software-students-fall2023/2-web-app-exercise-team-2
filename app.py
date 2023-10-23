@@ -50,11 +50,10 @@ def map_json_to_user(json_obj):
     try:
         name = json_obj.get("name")
         username = json_obj.get("username")
-        age = json_obj.get("age")
         password = json_obj.get("password")
         recipes = json_obj.get("recipes", [])
 
-        u = User(name, username, password, age)
+        u = User(name, username, password)
         u.recipes = recipes
         logger.info(f"{u.name} was created")  
         return u
@@ -68,7 +67,6 @@ def map_user_to_json(user):
         user_data = {
             "name": user.name,
             "username": user.username,
-            "age" : user.age,
             "password": user.password,
             "recipes": map_userRecipes_to_jsonRecipes(user)
         }
@@ -208,12 +206,14 @@ app.debug = True
 @app.route('/editscreen/<recipe_name>', methods=['GET', 'POST'])
 def show_editscreen(recipe_name):
     global currUser
+    user_data = users.find_one({"username": currUser.username})
+    recipes_from_db = user_data.get('recipes', [])
     
     if currUser is None:
         return redirect(url_for('login'))
     
     current_recipe = None
-    for recipe in currUser.recipes:
+    for recipe in recipes_from_db:
         if recipe['name'] == recipe_name:
             current_recipe = recipe
             break
@@ -222,13 +222,13 @@ def show_editscreen(recipe_name):
         return render_template('editscreen.html', recipe=current_recipe)
     
     elif request.method == 'POST': #if user's clicks on save button
-        updated_name = request.form['recipe_name']
+        # updated_name = request.form['recipe_name']
         updated_cook_time = request.form['cook_time']
         updated_ingredients = request.form['ingredients']
         updated_instructions = request.form['instructions']
 
         #updating
-        current_recipe['name'] = updated_name
+        # current_recipe['name'] = updated_name
         current_recipe['cook_time'] = updated_cook_time
         current_recipe['ingredients'] = updated_ingredients
         current_recipe['instructions'] = updated_instructions
@@ -244,7 +244,7 @@ def show_editscreen(recipe_name):
                 }}
             )
         return redirect(url_for('view_mainscreen'))
-
+ 
 # delete recipe screen
 @app.route('/deletescreen/<recipe_name>', methods=['GET', 'POST'])
 def show_deletescreen(recipe_name): #need to pass recipe_id as an arugment
@@ -302,5 +302,3 @@ def search_recipe(query):
     except Exception as e:
         logger.error(f"SEARCH ERROR: Problem searching for recipes with query '{query}'. Details: {e}")
         return []
-    
-

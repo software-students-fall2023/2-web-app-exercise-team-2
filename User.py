@@ -3,14 +3,12 @@ class User:
     name = None
     username = None
     password = None
-    age = None
     recipes = {}
 
-    def __init__(self, name, username, password, age = None, Recipe = None):
+    def __init__(self, name, username, password, Recipe = None):
         self.name = name
         self.username = username
         self.password = password
-        self.age = age
         self.recipes = [Recipe] if Recipe is not None else [] 
     def __str__(self):
         print(f"{self.name} with {self.username}")
