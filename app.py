@@ -312,4 +312,4 @@ def show_vieweprofile():
     
     # user_data = users.find_one({"username": currUser.username})  # refresh user data
     
-    return render_template('viewProfile.html', username=currUser.username, password=currUser.password)
+    return render_template('viewProfile.html', username=currUser.username, password=currUser.password, name=currUser.name)
