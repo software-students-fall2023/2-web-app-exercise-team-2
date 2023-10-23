@@ -86,29 +86,19 @@ body {
     font-weight: bold;
 }
 </style>
-<div class="container">
 <div class="phone-container">
     <button class="top-left" onclick="goBack()">Back</button>
-<!-- <div class="profilePhoto"></div> -->
+    <div class="title">Profile Information</div>
     <div class="container">
-        
-        <div class="title">Profile Information</div>
-        <!-- <input type="text" class="input" placeholder="Username" disabled="disabled">
-        <input type="password" class="input" placeholder="Password" disabled="disabled">
-        
-        </form>
-    </div> -->
         <div class="input">
             Name: <span>{{ name }}</span>
         </div>
         <div class="input">
             Username: <span>{{ username }}</span>
         </div>
-        <!-- Consider omitting the password display for security reasons -->
         <div class="input">
             Password: <span>{{ password }}</span>
         </div>
-</div>
     <script>
         function goBack() {
             window.location.href = "/mainscreen";
