@@ -56,6 +56,19 @@
             padding: 5px;
         }
 
+        .top-right {
+            position: absolute;
+            top: 2em;
+            right: 1.5em;
+            background-color: slateblue;
+            border-radius: 5px;
+            border: 0;
+            width: 5em;
+            height: 3em;
+            color: white;
+            padding: 5px;
+        }
+
         .container {
             margin-top: auto;
             height: 85%;
@@ -136,7 +149,7 @@
             margin-top: 10px;
         }
 
-        .add-recipe-button {
+     /*    .add-recipe-button {
             position: absolute;
             top: 1.25em;
             right: 1em;
@@ -145,6 +158,24 @@
             border-radius: 50%;
             width: 1.5em;
             height: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+        } */
+
+        .add-recipe-button {
+            position: absolute;
+            top: 32.5em;
+            right: .7em;
+            background-color: slateblue;
+            border: none;
+            border-radius: 50%;
+            width: 2em;
+            height: 2em;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -175,6 +206,8 @@
     <div class="phone-container">
         <button class="add-recipe-button" onclick="window.location.href='{{url_for('show_addscreen')}}'">+</button>
         <button class="top-left" type = "button" onclick = "window.location.href='{{url_for('view_dashboard')}}'">Log out</button>
+        <button class="top-right" type = "button" onclick = "window.location.href='{{url_for('show_createprofile')}}'">Profile</button>
+
         <div class="title">Recipes</div>
         
         <div class="container">
