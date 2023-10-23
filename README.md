@@ -1,6 +1,4 @@
-# Web Application Exercise
-
-A little exercise to build a web application following an agile development process. See the [instructions](instructions.md) for more detail.
+# Cooking with Ponyo
 
 ## Setup Instructions
 To setup environment make sure to download the following:
