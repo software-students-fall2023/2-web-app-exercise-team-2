@@ -16,6 +16,8 @@
     height: 3em;
     color: white;
     padding: 5px;
+    margin-left: 15px;
+    margin-top: 8px;
 }
 body {
     font-family: Arial, sans-serif;
@@ -60,9 +62,10 @@ body {
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid  slateblue;
     color: black;
     box-sizing: border-box;
+    background-color: #ccc;
 }
 .top-right {
     position: absolute;
@@ -76,21 +79,38 @@ body {
     color: white;
     padding: 5px;
 }
+.input span {
+    font-weight: normal;
+}
+.input strong {
+    font-weight: bold;
+}
 </style>
 <div class="container">
 <div class="phone-container">
-    <button class="top-left">Back</button>
-    <button class="top-right">Edit</button>
+    <button class="top-left" onclick="goBack()">Back</button>
 <!-- <div class="profilePhoto"></div> -->
     <div class="container">
         
         <div class="title">Profile Information</div>
-        <input type="Full Name" class="input" placeholder="Full Name" disabled="disabled">
-        <input type="text" class="input" placeholder="Username" disabled="disabled">
+        <!-- <input type="text" class="input" placeholder="Username" disabled="disabled">
         <input type="password" class="input" placeholder="Password" disabled="disabled">
         
         </form>
-    </div>
+    </div> -->
+        <div class="input">
+            Username: <span>{{ username }}</span>
+        </div>
+        <!-- Consider omitting the password display for security reasons -->
+        <div class="input">
+            Password: <span>{{ password }}</span>
+        </div>
+</div>
+    <script>
+        function goBack() {
+            window.location.href = "/mainscreen";
+        }
+    </script>
 </div>
 </div>
 </html>

@@ -302,3 +302,14 @@ def search_recipe(query):
     except Exception as e:
         logger.error(f"SEARCH ERROR: Problem searching for recipes with query '{query}'. Details: {e}")
         return []
+
+@app.route('/viewProfile', methods=['GET'])
+def show_vieweprofile():
+    global currUser
+    
+    if currUser is None:
+        return redirect(url_for('login'))
+    
+    # user_data = users.find_one({"username": currUser.username})  # refresh user data
+    
+    return render_template('viewProfile.html', username=currUser.username, password=currUser.password)

@@ -169,8 +169,7 @@
 
         .add-recipe-button {
             position: absolute;
-            top: 32.5em;
-            right: .7em;
+            top: 1em;
             background-color: lavender;
             border: none;
             border-radius: 50%;
@@ -181,7 +180,6 @@
             align-items: center;
             font-size: 24px;
             color: black;
-            border: 2px solid slateblue;
             cursor: pointer;
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
         }
@@ -207,7 +205,7 @@
     <div class="phone-container">
         <button class="add-recipe-button" onclick="window.location.href='{{url_for('show_addscreen')}}'">+</button>
         <button class="top-left" type = "button" onclick = "window.location.href='{{url_for('view_dashboard')}}'">Log out</button>
-        <button class="top-right" type = "button" onclick = "window.location.href='{{url_for('show_createprofile')}}'">Profile</button>
+        <button class="top-right" type = "button" onclick = "window.location.href='{{url_for('show_vieweprofile')}}'">Profile</button>
 
         <div class="title">Recipes</div>
         
