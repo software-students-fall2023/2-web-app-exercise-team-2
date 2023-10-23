@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="styles.css"/> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete screen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .title {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 1.9em;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5em;
+        }
+
+        .phone-container {
+            position: relative;
+            width: 390px;
+            height: 844px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px;
+            /* Removed shadow */
+            overflow: hidden;
+        }
+
+        .container {
+            margin-top: auto;
+            height: 85%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .delete-container {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+            border-radius: 10px;  
+        }
+
+        .Delete-button, .Delete-button2 {
+            margin-top: 18px;
+            width: 150px;
+            background-color: slateblue;
+            color: white;
+            border: none;
+            padding: 10px 1px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-family: Arial, sans-serif; /* Apply the desired font family */
+            font-size: 15.5px; /* Apply the desired font size */
+            font-weight: bold; /* Apply the desired font weight */
+        }
+
+        .Delete-button2 {
+            background-color: slateblue;
+            /* border-radius: 0 0px 9px 0; */
+            border-radius: 50px;
+            border-left: 1px solid #ccc;
+        }
+        .Delete-button {
+            background-color: slateblue;
+            /* border-radius: 0px 0 0 9px; */
+            border-right: 1px solid #ccc;
+            border-radius: 50px;
+        }
+        
+    .delete-text, delete-text2 {
+        font-family: "Your Font Name", sans-serif; /* Specify the desired font family */
+        font-size: 15.5px; /* Adjust the font size */
+        font-weight: normal; /* Adjust the font weight (e.g., normal, bold) */
+        color: #333; /* Specify the font color */
+    }
+    .delete-text2 {
+        font-family: "Your Font Name", sans-serif; /* Specify the desired font family */
+        font-size: 15.5px; /* Adjust the font size */
+        font-weight: bold; /* Adjust the font weight (e.g., normal, bold) */
+        color: #333; /* Specify the font color */
+    }
+
+    </style>
+</head>
+<body>
+    <div class="phone-container">    
+        <div class="delete-container">
+            <span class="delete-text">Would You Like to Delete This Recipe:</span>
+            <br>
+            <span class="delete-text2">{{ recipe.name }}</span>
+            <span class="delete-text">?
+            <br>
+            <span class="delete-text">You Cannot Undo this Action.</span>
+            <form method="POST" action="{{ url_for('show_deletescreen', recipe_name=recipe.name) }}">
+                <input type="hidden" name="decision" value="yes">
+                <button class="Delete-button" type="submit">Delete</button>
+                <a href="{{ url_for('view_mainscreen') }}" class="Delete-button2">Back</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

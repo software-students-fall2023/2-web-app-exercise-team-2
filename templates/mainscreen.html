@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main screen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-weight: bold;
+        }
+
+        .title {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 1.9em;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5em;
+        }
+
+
+        .phone-container {
+            position: relative;
+            width: 390px;
+            height: 844px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .top-left {
+            position: absolute;
+            top: 2em;
+            left: 1.5em;
+            background-color: slateblue;
+            border-radius: 5px;
+            border: 0;
+            width: 5em;
+            height: 3em;
+            color: white;
+            padding: 5px;
+        }
+
+        .top-right {
+            position: absolute;
+            top: 2em;
+            right: 1.5em;
+            background-color: slateblue;
+            border-radius: 5px;
+            border: 0;
+            width: 5em;
+            height: 3em;
+            color: white;
+            padding: 5px;
+        }
+
+        .container {
+            margin-top: auto;
+            height: 85%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .recipe {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            position: relative;
+            flex: auto;
+            background-color: slateblue;
+            color: white;
+            height: 8em;
+            width: 22.5em;
+            text-align: center;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .recipe-title {
+            font-size: 25px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .recipe-photo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 70%;
+            border-radius: 5px;
+            background-color: white;
+            background-size: cover;
+            background-position: center;
+            color: grey;
+        }
+        .input {
+        position: relative;
+        width: 360px;
+        left: 16px;
+        height: 25px;
+        top: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        color: black;
+        box-sizing: border-box;
+        background-color: #ffffff; 
+        z-index: 1;
+        }
+        .button-container{
+            width: 390px;
+        }
+
+        .recipe-button{
+            border-radius: 4px;
+            font-size: 16px;
+            border: none;
+            color: black;
+            background-color:lavender;
+            display: inline-block;
+            width: 28%;
+            padding: 10px;
+            box-sizing: border-box;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+     /*    .add-recipe-button {
+            position: absolute;
+            top: 1.25em;
+            right: 1em;
+            background-color: slateblue;
+            border: none;
+            border-radius: 50%;
+            width: 1.5em;
+            height: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+        } */
+
+        .add-recipe-button {
+            position: absolute;
+            top: 1em;
+            background-color: lavender;
+            border: none;
+            border-radius: 50%;
+            width: 2em;
+            height: 2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+        }
+
+        .delete-container {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+        }
+
+        .Delete-button, .Delete-button2 {
+            margin-top: 15px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="phone-container">
+        <button class="add-recipe-button" onclick="window.location.href='{{url_for('show_addscreen')}}'">+</button>
+        <button class="top-left" type = "button" onclick = "window.location.href='{{url_for('view_dashboard')}}'">Log out</button>
+        <button class="top-right" type = "button" onclick = "window.location.href='{{url_for('show_vieweprofile')}}'">Profile</button>
+
+        <div class="title">Recipes</div>
+        
+        <div class="container">
+        <!-- <input type="text" class="input" placeholder="Search By Recipe Name" required> -->
+        <input type="text" id="searchInput" class="input" placeholder="Search By Recipe Name" required onkeydown="filterRecipes(event)">
+            <!-- dynamic recipe cards from DB -->
+            {% if recipes %}
+                {% for recipe in recipes %}
+                <div class="recipe">
+                    <div class="recipe-title">{{ recipe.name }}</div>
+                    <div class="button-container">
+                        <a href="{{ url_for('show_recipescreen', recipe_name=recipe.name) }}">
+                            <button class="recipe-button">View</button>
+                        </a>
+                        
+                        <a href="{{ url_for('show_editscreen', recipe_name=recipe.name) }}">
+                            <button class="recipe-button">Edit</button>
+                        </a>
+                        <a href="{{ url_for('show_deletescreen', recipe_name=recipe.name) }}">
+                            <button class="recipe-button">Delete</button>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="width: 100%; text-align: center; font-weight: bold; font-size: 30px; color: grey;">
+                    NO RECIPES
+                </div>
+            {% endif %}
+        </div>
+        </div>
+    </div>
+    <script>
+        function filterRecipes(event) {
+            let input = document.getElementById('searchInput');
+
+            if (event.keyCode === 13) { //checking enter
+                event.preventDefault();
+                let filter = input.value.toUpperCase();
+                let recipes = document.getElementsByClassName('recipe');
+                let foundMatch = false;
+
+                for (let i = 0; i < recipes.length; i++) {
+                    let recipeTitle = recipes[i].getElementsByClassName('recipe-title')[0];
+                    if (recipeTitle) {
+                        let txtValue = recipeTitle.textContent || recipeTitle.innerText;
+                        if (!input.value.trim() || txtValue.toUpperCase().indexOf(filter) > -1) {
+                            recipes[i].style.display = "flex";
+                            foundMatch = true;
+                        } else {
+                            recipes[i].style.display = "none";
+                        }
+                    }
+                }
+                if (!foundMatch && input.value.trim()) {
+                    alert("No such recipe exists!");
+                    location.reload();
+                }
+            }
+        }
+        </script>   
+</body>
+
+</html>

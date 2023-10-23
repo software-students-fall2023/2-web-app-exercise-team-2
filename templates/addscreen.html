@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add screen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-weight: bold;
+        }
+
+        .title {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5em;
+        }
+
+        .phone-container {
+            position: relative;
+            width: 390px;
+            height: 844px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .container {
+            width: 22.5em;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            overflow-x: auto;
+            white-space: nowrap;
+
+        }
+
+        .form {
+            flex-direction: column;
+            display: flex;
+            padding: 10px;
+            justify-content: space-between;
+
+        }
+
+        .title {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5em;
+        }
+
+        .input {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            color: black;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        .input.ingredients, input.instructions {
+            height: 100px;
+            resize: none;
+            overflow-y: scroll;
+        }
+ 
+        .button {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            color: black;
+            font-size: 16px;
+            background-color: lavender;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .recipe {
+            flex: 1 1 150px;
+            margin-top: 1px;
+            background-color: slateblue;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        ::placeholder {
+            color: grey;
+            font-weight: bold;
+        }
+
+        .top-left {
+            position: absolute;
+            top: 2em;
+            left: 1.5em;
+            background-color: slateblue;
+            border-radius: 5px;
+            border: 0;
+            width: 5em;
+            height: 3em;
+            color: white;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="phone-container">
+        <button class="top-left" onclick="goBack()">Back</button>
+        <div class="title">Add screen</div>
+        <div class="container">
+            <div class="recipe">
+                <form class="form" action="/addscreen" method="post">
+                    <input type="text" name="recipe_name" class="input" placeholder="Recipe name" required>
+
+
+                    <textarea name="ingredients" class="input ingredients" placeholder="Ingredients"></textarea>
+                    <textarea name="instructions" class="input instructions" placeholder="Instructions"
+                        required></textarea>
+                    <input type="text" name="cook_time" class="input" placeholder="Cooking time" required>
+                    <button class="button">Save</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function goBack() {
+            window.location.href = "/mainscreen";
+        }
+    </script>
+    
+</body>
+
+</html>
